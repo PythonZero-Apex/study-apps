@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>統計検定2級 練習問題</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="anonymous" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#ffffff; --ink:#1f2430; --muted:#5d6471; --line:#e3e6ec;
+    --accent:#4b5bd4; --accent-d:#37419b; --ok:#1d9e75; --okbg:#e1f5ee; --ng:#d8453f; --ngbg:#fbeaea;
+    --chip:#eef0f6; --bar:#7f77dd; --bar-d:#534ab7; --pt:#37419b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic UI",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+  .wrap{max-width:680px;margin:0 auto;padding:16px 14px 60px}
+  h1{font-size:20px;margin:6px 0 2px}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}
+  .row{display:flex;flex-wrap:wrap;gap:8px}
+  label.fld{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+  select,button{font-size:15px;font-family:inherit}
+  select{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+  .btn{appearance:none;border:1px solid var(--line);background:#fff;color:var(--ink);padding:11px 14px;border-radius:10px;cursor:pointer}
+  .btn:hover{background:#f0f2f8}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{background:var(--accent-d)}
+  .btn.block{width:100%;text-align:center}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{font-size:12px;background:var(--chip);color:var(--muted);border-radius:999px;padding:3px 10px}
+  .qmeta{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;margin-bottom:8px}
+  .qtext{font-size:16px;margin:0 0 12px}
+  .opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:11px;padding:12px;margin:8px 0;cursor:pointer;transition:.05s}
+  .opt:hover{background:#f3f5fb}
+  .opt.sel{border-color:var(--accent);background:#eef0fb}
+  .opt.correct{border-color:var(--ok);background:var(--okbg)}
+  .opt.wrong{border-color:var(--ng);background:var(--ngbg)}
+  .opt .mk{font-weight:600;margin-right:6px}
+  .expl{background:#f4f6fb;border-radius:11px;padding:12px;margin-top:10px;font-size:14px;display:none}
+  .expl.show{display:block}
+  .expl .tag{font-weight:600}
+  .expl .tag.ok{color:var(--ok)} .expl .tag.ng{color:var(--ng)}
+  .bar-prog{height:6px;background:var(--line);border-radius:999px;overflow:hidden;margin:4px 0 12px}
+  .bar-prog>i{display:block;height:100%;background:var(--accent)}
+  .stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .stat{background:#f4f6fb;border-radius:11px;padding:12px}
+  .stat .n{font-size:22px;font-weight:600}
+  .stat .l{font-size:12px;color:var(--muted)}
+  .dom{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:13px}
+  .dom .nm{flex:0 0 38%}
+  .dom .tr{flex:1;height:8px;background:var(--line);border-radius:999px;overflow:hidden}
+  .dom .tr>i{display:block;height:100%}
+  .dom .pc{flex:0 0 46px;text-align:right;color:var(--muted)}
+  .center{text-align:center}
+  .muted{color:var(--muted)}
+  .figure{margin:6px 0 12px;text-align:center}
+  .figure svg{max-width:100%;height:auto}
+  .sptrend{display:flex;align-items:flex-end;gap:3px;height:40px;margin-top:6px}
+  .sptrend>i{flex:1;background:var(--accent);border-radius:2px 2px 0 0;min-height:2px}
+  .footer{font-size:12px;color:var(--muted);text-align:center;margin-top:24px}
+  .hide{display:none}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>統計検定2級 練習問題</h1>
+  <p class="sub">記述統計（1変数・2変数）／ オリジナル問題・復習モード・進捗保存つき</p>
+
+  <!-- ホーム -->
+  <div id="home">
+    <div class="card" id="dash"></div>
+    <div class="card">
+      <label class="fld">分野</label>
+      <select id="selDomain"></select>
+      <label class="fld">出題数</label>
+      <select id="selCount">
+        <option value="5">5問</option>
+        <option value="10" selected>10問</option>
+        <option value="20">20問</option>
+        <option value="0">全部</option>
+      </select>
+      <label class="fld">難易度</label>
+      <select id="selDiff">
+        <option value="__all" selected>すべて</option>
+        <option value="基礎">基礎</option>
+        <option value="標準">標準</option>
+        <option value="応用">応用</option>
+      </select>
+      <label class="fld">出題順</label>
+      <select id="selOrder">
+        <option value="random" selected>ランダム</option>
+        <option value="seq">番号順</option>
+      </select>
+      <div style="height:12px"></div>
+      <button class="btn primary block" id="btnStart">演習を始める</button>
+      <div style="height:8px"></div>
+      <button class="btn block" id="btnReview">復習モード（間違えた問題だけ）<span id="reviewCount" class="muted"></span></button>
+    </div>
+    <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <span class="muted" style="font-size:13px">学習記録</span>
+        <button class="btn" id="btnReset" style="font-size:13px;padding:6px 10px">記録をリセット</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- クイズ -->
+  <div id="quiz" class="hide">
+    <div class="bar-prog"><i id="prog"></i></div>
+    <div class="card">
+      <div class="qmeta"><span id="qpos"></span><span><span id="qdiff" class="chip"></span> <span id="qdom" class="chip"></span></span></div>
+      <div class="figure" id="qfig"></div>
+      <div class="qtext" id="qtext"></div>
+      <div id="opts"></div>
+      <div class="expl" id="expl"></div>
+      <div style="height:12px"></div>
+      <button class="btn primary block hide" id="btnCheck">解答する</button>
+      <button class="btn primary block hide" id="btnNext">次へ</button>
+      <div style="height:8px"></div>
+      <button class="btn block" id="btnQuit" style="font-size:13px">中断してホームへ</button>
+    </div>
+  </div>
+
+  <!-- 結果 -->
+  <div id="result" class="hide">
+    <div class="card center">
+      <div class="muted" style="font-size:13px">今回の結果</div>
+      <div style="font-size:34px;font-weight:700;margin:6px 0" id="rScore"></div>
+      <div class="muted" id="rDetail"></div>
+      <div style="height:14px"></div>
+      <button class="btn primary block" id="btnAgain">もう一度</button>
+      <div style="height:8px"></div>
+      <button class="btn block" id="btnReviewWrong">この回の間違いを復習</button>
+      <div style="height:8px"></div>
+      <button class="btn block" id="btnHome">ホームへ</button>
+    </div>
+  </div>
+
+  <div class="footer">出題はすべてオリジナル問題（過去問の複製ではありません）。進捗はこの端末内にのみ保存されます。</div>
+</div>
+
+<script>
+const QUESTIONS = [{"id": 1, "domain": "1変数データ", "difficulty": "基礎", "type": "single", "q": "次の5個のデータの中央値（メジアン）はいくらか。 $\\{4,\\ 8,\\ 6,\\ 10,\\ 7\\}$", "options": ["6", "7", "7.5", "8"], "answer": [1], "explanation": "中央値は「小さい順に並べたとき真ん中に来る値」。手順は2つ。①並べ替える：$4,6,7,8,10$。②データ数 $n=5$ は奇数なので、ちょうど中央の $\\frac{n+1}{2}=3$ 番目の値が中央値で、$7$。<br>補足：今回は平均も $35/5=7$ で偶然一致するが、両者は別物。平均は全部の値を足して割る、中央値は順位で決める。データに外れ値があると平均だけ大きくずれる、という違いを意識しておくと後の問題で効く。"}, {"id": 2, "domain": "1変数データ", "difficulty": "基礎", "type": "single", "q": "あるデータに1つだけ極端に大きい外れ値が混じっている。外れ値の影響を最も受けにくい代表値はどれか。", "options": ["平均値", "中央値", "範囲", "標準偏差"], "answer": [1], "explanation": "「外れ値に強い＝ロバスト」かどうかで考える。中央値は順位だけで決まるので、端の1つが極端でも真ん中の値はほとんど動かない。<br>一方、平均値は全データの合計を使うので大きな値に引っ張られる。範囲（最大−最小）と標準偏差は『散らばり』の指標で、まさに端の値で決まる/大きく増えるため外れ値に非常に弱い。<br>覚え方：中央値・四分位数=ロバスト、平均・分散・標準偏差・範囲=外れ値に弱い。"}, {"id": 3, "domain": "1変数データ", "difficulty": "標準", "type": "single", "q": "下のヒストグラム（ある50人のテスト得点）について、平均値と中央値の大小関係として最も適切なものはどれか。", "options": ["平均値 < 中央値", "平均値 ≒ 中央値", "平均値 > 中央値", "判断できない"], "answer": [2], "explanation": "まず分布の形を読む。山（最頻）が左寄りの50〜60点にあり、右側へなだらかに長い裾を引いている。これを「右に裾が長い＝正の歪み」という。<br>次に平均と中央値の動き方。平均は値の大きさに反応するので、右の裾にある少数の高得点者に引っ張られて右（大きい方）へ寄る。中央値は人数で真ん中を取るだけなので裾に鈍感。<br>結果として 平均値 > 中央値（正確には 平均 > 中央値 > 最頻値）。左に裾が長いときはすべて逆向きになる。図と『平均は裾に引っ張られる』をセットで覚えると確実。", "figure": {"type": "histogram", "edges": [30, 40, 50, 60, 70, 80, 90, 100], "freqs": [2, 8, 14, 12, 7, 4, 3], "xlabel": "得点", "ylabel": "度数"}}, {"id": 4, "domain": "1変数データ", "difficulty": "標準", "type": "single", "q": "次の7個のデータの四分位範囲（IQR）はいくらか。ただし四分位数は、中央値を除いた下位・上位それぞれの中央値とする。 $\\{1,3,5,7,9,11,13\\}$", "options": ["6", "7", "8", "10"], "answer": [2], "explanation": "IQRは『真ん中50%の幅』で、$\\mathrm{IQR}=Q_3-Q_1$。手順を踏む。<br>①全体の中央値 $Q_2$ を出す：7個の真ん中（4番目）は $7$。<br>②この中央値を除いて下半分・上半分に分ける。下位 $\\{1,3,5\\}$、上位 $\\{9,11,13\\}$。<br>③それぞれの中央値が四分位数：$Q_1=3$、$Q_3=11$。<br>④$\\mathrm{IQR}=Q_3-Q_1=11-3=8$。<br>注意：四分位数の求め方には複数流儀があり、この問題のように『中央値を除く』方式を明示されることが多い。範囲（最大−最小=12）と混同しないこと。"}, {"id": 5, "domain": "1変数データ", "difficulty": "基礎", "type": "single", "q": "下の箱ひげ図について、中央値と四分位範囲（IQR）の組として正しいものはどれか。", "options": ["中央値 35・IQR 30", "中央値 50・IQR 30", "中央値 50・IQR 45", "中央値 65・IQR 50"], "answer": [1], "explanation": "箱ひげ図の各部品を読み取る。箱の中の縦線＝中央値で $50$。箱の左端＝第1四分位数 $Q_1=35$、右端＝第3四分位数 $Q_3=65$。ひげの両端＝最小 $20$・最大 $90$。<br>IQRは『箱の幅』なので $\\mathrm{IQR}=Q_3-Q_1=65-35=30$。<br>ひっかけ：ひげ端を使う『範囲』$=90-20=70$ や、最大−中央値などはIQRではない。IQR＝箱の横幅、と図で覚える。", "figure": {"type": "boxplot", "min": 20, "q1": 35, "med": 50, "q3": 65, "max": 90, "xlabel": "点数"}}, {"id": 6, "domain": "1変数データ", "difficulty": "標準", "type": "single", "q": "次の4個のデータについて、偏差平方和を $n$ で割って求める分散（標本分散）はいくらか。 $\\{1,3,5,7\\}$", "options": ["5", "6.67", "$\\sqrt5$", "20"], "answer": [0], "explanation": "分散は『偏差（平均からのズレ）の2乗の平均』。手順は決まっている。<br>①平均：$\\bar{x}=\\frac{1+3+5+7}{4}=\\frac{16}{4}=4$。<br>②偏差 $x_i-\\bar{x}$：$-3,\\,-1,\\,1,\\,3$。<br>③偏差の2乗：$9,\\,1,\\,1,\\,9$。和（偏差平方和）は $20$。<br>④$n=4$ で割る：分散 $=\\frac{20}{4}=5$。<br>区別が超重要：ここでの『標本分散』は $n$ で割る。母分散の推定に使う『不偏分散』は $n-1=3$ で割って $\\frac{20}{3}\\approx6.67$（選択肢の罠）。問題文がどちらを問うているか必ず確認する。"}, {"id": 7, "domain": "1変数データ", "difficulty": "基礎", "type": "single", "q": "あるデータの全ての値に同じ定数 $c$ を足した。このとき変化しない統計量はどれか。", "options": ["平均値", "中央値", "標準偏差", "最大値"], "answer": [2], "explanation": "全データを同じだけ平行移動するイメージ。データの『位置』は丸ごと $c$ ずれるが、データ同士の『間隔（散らばり）』は変わらない。<br>したがって散らばりの指標である標準偏差（および分散・範囲・IQR）は不変。位置を表す平均・中央値・最大値・最小値はすべて $+c$ される。<br>発展：全データを $c$ 倍したときは、平均は $c$ 倍、標準偏差は $|c|$ 倍、分散は $c^2$ 倍になる（足し算と掛け算で挙動が違う）。"}, {"id": 8, "domain": "1変数データ", "difficulty": "基礎", "type": "single", "q": "平均が大きく異なる2グループの「相対的なばらつき」を比較したい。最も適切な指標はどれか。", "options": ["分散", "標準偏差", "変動係数", "範囲"], "answer": [2], "explanation": "標準偏差は『絶対的な』ばらつきで単位を持つ（点なら点、円なら円）。平均の水準が大きく違う2群をそのまま標準偏差で比べると、水準の差に引きずられて公平でない。<br>そこで平均で割って無次元化したのが変動係数 $\\mathrm{CV}=\\frac{s}{\\bar{x}}$。『平均1あたり、どれくらいばらついているか』を表すので、単位や水準が違うデータ同士でも相対比較できる。<br>例：平均1000で標準偏差100（CV=0.1）と、平均10で標準偏差2（CV=0.2）なら、後者の方が相対的にばらつきが大きい。"}, {"id": 9, "domain": "1変数データ", "difficulty": "標準", "type": "single", "q": "平均 $70$、標準偏差 $5$ のテストで $80$ 点をとった。この得点を標準化（z得点に変換）するといくらか。", "options": ["0.5", "2", "10", "16"], "answer": [1], "explanation": "標準化は『平均から何標準偏差ぶん離れているか』を測る変換で、$z=\\frac{x-\\bar{x}}{s}$。<br>代入すると $z=\\frac{80-70}{5}=\\frac{10}{5}=2$。つまりこの点は平均より標準偏差2個分だけ上。<br>意味：標準化すると平均0・標準偏差1のものさしに揃うので、平均も散らばりも違うテスト同士を公平に比較できる（次の問題で実際に使う）。"}, {"id": 10, "domain": "1変数データ", "difficulty": "標準", "type": "single", "q": "平均 $\\bar{x}$ からの偏差 $x_i-\\bar{x}$ について、常に成り立つものはどれか。", "options": ["偏差の総和は0", "偏差の総和は正", "偏差の平方和は0", "偏差の平均は1"], "answer": [0], "explanation": "式で確かめる。$\\sum_{i}(x_i-\\bar{x})=\\sum_i x_i - n\\bar{x}$。ここで $\\bar{x}=\\frac{1}{n}\\sum x_i$ なので $n\\bar{x}=\\sum x_i$。よって $\\sum(x_i-\\bar{x})=\\sum x_i-\\sum x_i=0$。<br>つまりプラスのズレとマイナスのズレが必ず打ち消し合う。これが『散らばりを偏差の単純合計では測れない』理由で、符号を消すために2乗してから足す（＝分散）わけ。偏差平方和は0以上で、全데ータが同じ値のときだけ0になる。"}, {"id": 11, "domain": "1変数データ", "difficulty": "標準", "type": "single", "q": "下の度数分布（ヒストグラム）について、各階級は階級値（区間の中央の値）で代表させる。このデータの平均値はいくらか。", "options": ["15", "18", "20", "25"], "answer": [1], "explanation": "元データが分からないときは、各階級の代表として『階級値（区間の真ん中）』を使って平均を出す。<br>①階級値：$[0,10)\\to5$、$[10,20)\\to15$、$[20,30)\\to25$。<br>②度数：$2,3,5$（合計 $10$）。<br>③（階級値×度数）の和：$5\\times2+15\\times3+25\\times5=10+45+125=180$。<br>④総度数で割る：$\\bar{x}=\\frac{180}{10}=18$。<br>ポイント：度数分布からの平均は『階級値×度数の合計 ÷ 総度数』。階級値の取り方（区間の中央）を間違えないこと。", "figure": {"type": "histogram", "edges": [0, 10, 20, 30], "freqs": [2, 3, 5], "xlabel": "値", "ylabel": "度数"}}, {"id": 12, "domain": "1変数データ", "difficulty": "標準", "type": "single", "q": "あるデータで $Q_1=10,\\ Q_3=30$ であった。箱ひげ図で外れ値とみなす一般的な基準（$1.5\\times\\mathrm{IQR}$ ルール）では、上側はいくらを超える値が外れ値か。", "options": ["45", "50", "60", "90"], "answer": [2], "explanation": "外れ値の代表的な基準が『1.5×IQRルール』。手順は次の通り。<br>①$\\mathrm{IQR}=Q_3-Q_1=30-10=20$。<br>②上側の境界（上内境界）$=Q_3+1.5\\times\\mathrm{IQR}=30+1.5\\times20=30+30=60$。これを超える値が外れ値。<br>③（参考）下側は $Q_1-1.5\\times\\mathrm{IQR}=10-30=-20$ 未満が外れ値。<br>箱ひげ図のひげは通常この境界内の最大・最小まで伸び、境界を超えた点は外れ値として個別の点で描かれる。"}, {"id": 13, "domain": "1変数データ", "difficulty": "標準", "type": "multi", "q": "「左に裾が長い（負に歪んだ）」分布について正しい記述をすべて選べ。", "options": ["平均値 < 中央値 となる傾向", "平均値 > 中央値 となる傾向", "左側（小さい値）に長い裾がある", "右側（大きい値）に長い裾がある"], "answer": [0, 2], "explanation": "『左に裾が長い』とは、小さい値の側に少数の極端なデータがあり、そこへ向かって裾が伸びる形。<br>平均はその少数の小さい値に引っ張られて下がるため、平均 < 中央値 となる（裾のある方向へ平均が動く、と覚える）。<br>対比：右に裾が長い（正の歪み）なら、平均 > 中央値 で右に裾。今回は左なので、正解は『平均 < 中央値』と『左側に長い裾』の2つ。"}, {"id": 14, "domain": "1変数データ", "difficulty": "標準", "type": "single", "q": "ヒストグラムと箱ひげ図の使い分けについて、最も適切な記述はどれか。", "options": ["ヒストグラムは分布の形（山の数や歪み）を把握しやすい", "箱ひげ図は分布が二峰性かどうかを必ず判別できる", "箱ひげ図は個々の度数の高さを表示できる", "ヒストグラムは複数群の中央値比較に箱ひげ図より常に優れる"], "answer": [0], "explanation": "それぞれの長所と限界で判断する。<br>ヒストグラム：度数の高さで分布の形（山が1つか2つか、左右の歪み）を直感的に見られる。○<br>箱ひげ図：5数要約（最小・$Q_1$・中央値・$Q_3$・最大）に圧縮した図。情報を絞るぶん、山の数（二峰性）は見えない（×の選択肢2）。度数の高さも表示しない（×の選択肢3）。<br>複数群の中央値・ばらつきを横並びで一覧比較するのはむしろ箱ひげ図が得意（×の選択肢4）。<br>よって正しいのは選択肢1。"}, {"id": 15, "domain": "2変数データ", "difficulty": "基礎", "type": "single", "q": "相関係数 $r$ について正しい記述はどれか。", "options": ["$r$ は $-1 \\le r \\le 1$ の範囲をとる", "$r$ は $0 \\le r \\le 1$ の範囲をとる", "$r=0$ なら2変数は必ず独立である", "$r$ は測定単位を変えると値も変わる"], "answer": [0], "explanation": "相関係数（ピアソン）は2変数の『直線的な』関係の強さと向きを表す。<br>範囲は $-1\\le r\\le1$。$+1$＝完全な右上がりの直線、$-1$＝完全な右下がりの直線、$0$＝直線的な関係なし。<br>注意点2つ。①$r=0$ でも放物線のような非線形の関係はあり得るので『独立』とは限らない（選択肢3は誤り）。②各変数を線形変換（単位換算など）しても $r$ は不変（選択肢4は誤り）。標準化して定義しているため。"}, {"id": 16, "domain": "2変数データ", "difficulty": "基礎", "type": "single", "q": "下の散布図から読み取れる2変数の相関として最も適切なものはどれか。", "options": ["強い正の相関", "弱い正の相関", "ほぼ無相関", "負の相関"], "answer": [3], "explanation": "散布図は『点の並ぶ向きと締まり具合』で読む。点群が右下がり（$x$ が増えると $y$ が減る）にきれいに並んでいるので、負の相関。<br>向きの判定：右上がり＝正、右下がり＝負、ばらばら＝無相関。締まり具合：直線に近いほど $|r|$ が大きい。今回は直線的に右下がりなので『強めの負の相関』に当たる。", "figure": {"type": "scatter", "points": [[1, 9], [2, 8.2], [3, 7], [4, 6.5], [5, 5.2], [6, 4], [7, 3.4], [8, 2]], "xlabel": "x", "ylabel": "y"}}, {"id": 17, "domain": "2変数データ", "difficulty": "標準", "type": "single", "q": "身長(cm)と体重(kg)の相関係数を求めた。身長の単位をcmからm（1/100倍）に変えると、相関係数はどうなるか。", "options": ["1/100倍になる", "100倍になる", "変わらない", "0になる"], "answer": [2], "explanation": "相関係数は $r=\\frac{s_{xy}}{s_x s_y}$ という形で、共分散を各標準偏差で割って『標準化』している。<br>身長を $1/100$ 倍すると、共分散 $s_{xy}$ も身長の標準偏差 $s_x$ もどちらも $1/100$ 倍になり、割り算で打ち消し合う。よって $r$ は不変。<br>一般に、各変数を定数倍・定数加算（線形変換）しても相関係数は変わらない。これは『相関は単位に依らない無次元量』だから。共分散は単位に依存して値が変わる点と対比して覚える。"}, {"id": 18, "domain": "2変数データ", "difficulty": "基礎", "type": "single", "q": "2変数 $x,\\ y$ の共分散が負であった。このことから言えるのはどれか。", "options": ["$x$ が大きいほど $y$ も大きい傾向", "$x$ が大きいほど $y$ は小さい傾向", "2変数は無関係", "回帰直線は水平になる"], "answer": [1], "explanation": "共分散は $s_{xy}=\\frac{1}{n}\\sum (x_i-\\bar{x})(y_i-\\bar{y})$。各データで『$x$ の偏差』と『$y$ の偏差』を掛けて平均したもの。<br>共分散が負ということは、$x$ が平均より大きいとき $y$ は平均より小さい（積がマイナス）という組が多いという意味。つまり逆方向の関係＝負の相関。<br>符号の対応：共分散>0 で同方向、<0 で逆方向、≒0 で直線的関係が弱い。相関係数の符号も共分散の符号と一致する。"}, {"id": 19, "domain": "2変数データ", "difficulty": "標準", "type": "single", "q": "最小二乗法で求めた単回帰直線 $\\hat{y}=a+bx$ について、必ず成り立つものはどれか。", "options": ["原点 $(0,0)$ を必ず通る", "点 $(\\bar{x},\\ \\bar{y})$ を必ず通る", "すべての観測点を通る", "傾き $b$ は必ず正"], "answer": [1], "explanation": "最小二乗法は『各点と直線の縦のズレ（残差）の2乗和』を最小にするように直線を引く方法。<br>その結果、切片は $a=\\bar{y}-b\\bar{x}$ となる。これを回帰式に戻すと、$x=\\bar{x}$ のとき $\\hat{y}=a+b\\bar{x}=\\bar{y}$。つまり必ずデータの重心 $(\\bar{x},\\bar{y})$ を通る。<br>他の選択肢：原点を通るとは限らない、全点をぴったり通るのは完全相関のときだけ、傾きの符号は相関の符号しだいで負にもなる。"}, {"id": 20, "domain": "2変数データ", "difficulty": "標準", "type": "single", "q": "相関係数 $r=0.8$、$x$ の標準偏差 $s_x=2$、$y$ の標準偏差 $s_y=5$ のとき、$y$ を $x$ で説明する回帰直線の傾き $b$ はいくらか。", "options": ["0.32", "0.8", "2.0", "3.2"], "answer": [2], "explanation": "回帰直線の傾きは『相関係数 × 標準偏差の比』で求められる：$b=r\\dfrac{s_y}{s_x}$。<br>代入すると $b=0.8\\times\\dfrac{5}{2}=0.8\\times2.5=2.0$。<br>意味：$x$ が1増えると $\\hat{y}$ は平均して $2.0$ 増える。注意：相関係数 $r$ そのものは傾きではない。標準偏差の比を掛けて初めて『$y$ の単位での傾き』になる。別式 $b=\\dfrac{s_{xy}}{s_x^2}$ でも同じ値になる。"}, {"id": 21, "domain": "2変数データ", "difficulty": "標準", "type": "single", "q": "単回帰で相関係数が $r=0.6$ であった。決定係数 $R^2$ はいくらか。", "options": ["0.16", "0.36", "0.6", "0.77"], "answer": [1], "explanation": "単回帰では決定係数は相関係数の2乗：$R^2=r^2=0.6^2=0.36$。<br>意味：$y$ のばらつき（全変動）のうち $36\\%$ が回帰直線（＝$x$）で説明でき、残り $64\\%$ は説明できないということ。$R^2$ は0〜1で、1に近いほど当てはまりが良い。<br>頻出のひっかけ：$r=0.6$ をそのまま当てはまりの良さと思って $0.6$ を選ばないこと。当てはまりの程度を表すのは $R^2=r^2$ の方。"}, {"id": 22, "domain": "2変数データ", "difficulty": "基礎", "type": "single", "q": "「アイスの売上」と「水難事故件数」に強い正の相関が見られた。最も適切な解釈はどれか。", "options": ["アイスを食べると水難事故が増える", "水難事故が増えるとアイスが売れる", "気温という共通要因（交絡）で両方が増える可能性がある", "相関が強いので因果関係が証明された"], "answer": [2], "explanation": "相関があっても因果があるとは限らない（相関≠因果）。ここでは『気温が高い』という第三の要因が、アイスの売上と水辺の利用（→水難事故）の両方を同時に押し上げていると考えるのが自然。このような共通要因を交絡変数という。<br>相関の強さは因果の証拠にならない（選択肢4は誤り）。因果を主張するには、交絡を取り除いた比較（実験や層別など）が必要。データを見るときの最重要な注意点の一つ。"}, {"id": 23, "domain": "2変数データ", "difficulty": "基礎", "type": "single", "q": "下の散布図に当てはめた回帰直線は $\\hat{y}=2+1.5x$ である。$x=4$ のときの $y$ の予測値はいくらか。", "options": ["6", "8", "9.5", "11"], "answer": [1], "explanation": "予測は回帰式に $x$ の値を代入するだけ。$\\hat{y}=2+1.5\\times4=2+6=8$。<br>$2$ は切片（$x=0$ のときの予測値）、$1.5$ は傾き（$x$ が1増えると $\\hat{y}$ が1.5増える）。<br>注意：データが存在する範囲の外で予測する『外挿』は、関係が同じ形で続く保証がないため信頼性が下がる。今回の $x=4$ はデータ範囲内なので安全。", "figure": {"type": "scatter", "points": [[1, 3.2], [2, 5.1], [3, 6.4], [4, 8.3], [5, 9.4], [6, 11.2]], "line": {"a": 2, "b": 1.5}, "xlabel": "x", "ylabel": "y"}}, {"id": 24, "domain": "2変数データ", "difficulty": "標準", "type": "single", "q": "ある調査で、喫煙者100人中30人が咳あり、非喫煙者200人中20人が咳ありだった。喫煙者の「咳あり」の割合（条件付き割合）はいくらか。", "options": ["10%", "20%", "30%", "50%"], "answer": [2], "explanation": "条件付き割合は『どの集団（条件）の中での割合か』を意識する。ここでは“喫煙者という条件のもとで”咳ありの割合なので、分母は喫煙者100人。<br>$\\frac{30}{100}=0.30=30\\%$。<br>比較：非喫煙者では $\\frac{20}{200}=10\\%$。喫煙者30% vs 非喫煙者10%で差があり、喫煙と咳に関連がうかがえる。クロス集計では『行で割るか列で割るか』で割合の意味が変わるので、必ず分母を確認すること。"}, {"id": 25, "domain": "1変数データ", "difficulty": "標準", "type": "single", "q": "次の5個のデータについて、不偏分散（偏差平方和を $n-1$ で割る）はいくらか。 $\\{2,4,4,6,9\\}$", "options": ["5.6", "7", "$\\sqrt7$", "28"], "answer": [1], "explanation": "手順を踏む。<br>①平均：$\\bar{x}=\\frac{2+4+4+6+9}{5}=\\frac{25}{5}=5$。<br>②偏差：$-3,\\,-1,\\,-1,\\,1,\\,4$。<br>③偏差の2乗：$9,\\,1,\\,1,\\,1,\\,16$。和（偏差平方和）$=28$。<br>④不偏分散は $n-1=4$ で割る：$\\frac{28}{4}=7$。<br>区別：標本分散なら $n=5$ で割って $\\frac{28}{5}=5.6$（選択肢の罠）。母集団のばらつきを推定する文脈では $n-1$ で割る不偏分散を使う、と覚える。"}, {"id": 26, "domain": "1変数データ", "difficulty": "応用", "type": "single", "q": "クラスA（20人）の平均点は60点、クラスB（30人）の平均点は80点だった。両クラスを合わせた50人全体の平均点はいくらか。", "options": ["70点", "72点", "75点", "判断できない"], "answer": [1], "explanation": "2つの平均を単純に $(60+80)/2=70$ としてはいけない。人数が違うので『加重平均』にする。<br>考え方は合計を作り直すこと。①各クラスの合計点：A $=60\\times20=1200$、B $=80\\times30=2400$。②全体の合計 $=1200+2400=3600$。③全体の人数 $50$ で割る：$\\frac{3600}{50}=72$。<br>人数の多いB（80点）寄りに引っ張られて、単純平均70より高い72になる。これが加重平均。"}, {"id": 27, "domain": "1変数データ", "difficulty": "標準", "type": "single", "q": "国語は平均60・標準偏差10のテストで75点、数学は平均70・標準偏差5のテストで78点だった。集団内での相対的な位置がより上位なのはどちらか。", "options": ["国語", "数学", "同じ", "判断できない"], "answer": [1], "explanation": "素点（75 vs 78）では平均も散らばりも違うので直接比べられない。標準化（z得点 $z=\\frac{x-\\bar{x}}{s}$）して同じものさしに揃える。<br>国語：$z=\\frac{75-60}{10}=\\frac{15}{10}=1.5$。<br>数学：$z=\\frac{78-70}{5}=\\frac{8}{5}=1.6$。<br>z得点が大きいほど集団内で上位。$1.6>1.5$ なので数学の方が相対的に上位。点数の高さではなく『平均から標準偏差何個分か』で比べるのがコツ。"}, {"id": 28, "domain": "1変数データ", "difficulty": "標準", "type": "single", "q": "商品Aは平均価格50・標準偏差10、商品Bは平均価格200・標準偏差20であった。相対的なばらつき（変動係数）が小さいのはどちらか。", "options": ["商品A", "商品B", "同じ", "標準偏差だけでは比較できる"], "answer": [1], "explanation": "標準偏差だけ見るとB（20）の方が大きいが、平均の水準が4倍違うので不公平。相対的ばらつきは変動係数 $\\mathrm{CV}=\\frac{s}{\\bar{x}}$ で比べる。<br>A：$\\frac{10}{50}=0.20$。<br>B：$\\frac{20}{200}=0.10$。<br>CVが小さいBの方が、平均に対するばらつきが相対的に小さい。『標準偏差が大きい＝ばらつきが大きい』とは限らない、という典型例。"}, {"id": 29, "domain": "1変数データ", "difficulty": "標準", "type": "single", "q": "ある変数 $x$ の平均は10、標準偏差は4である。$y=2x+3$ と変換したとき、$y$ の標準偏差はいくらか。", "options": ["4", "8", "11", "23"], "answer": [1], "explanation": "線形変換 $y=ax+b$ での平均と標準偏差の変わり方を使う。<br>平均：$\\bar{y}=a\\bar{x}+b$（足し算も効く）。今回 $\\bar{y}=2\\times10+3=23$。<br>標準偏差：$s_y=|a|\\,s_x$（足す定数 $b$ は散らばりに影響しない）。今回 $s_y=|2|\\times4=8$。<br>ポイント：定数の足し算は位置をずらすだけで散らばりを変えない。掛け算だけが散らばりを $|a|$ 倍する。分散なら $a^2$ 倍で $2^2\\times16=64$。"}, {"id": 30, "domain": "1変数データ", "difficulty": "応用", "type": "single", "q": "次の10個のデータの四分位範囲（IQR）はいくらか。四分位数は下位5個・上位5個それぞれの中央値とする。 $\\{3,5,6,8,9,11,12,14,15,20\\}$", "options": ["6", "8", "9", "11"], "answer": [1], "explanation": "データ数が偶数（$n=10$）の場合の手順。<br>①全体を半分に分ける：下位5個 $\\{3,5,6,8,9\\}$、上位5個 $\\{11,12,14,15,20\\}$（偶数なので中央値をまたいでちょうど半分）。<br>②各半分の中央値が四分位数：下位の真ん中（3番目）$Q_1=6$、上位の真ん中（3番目）$Q_3=14$。<br>③$\\mathrm{IQR}=Q_3-Q_1=14-6=8$。<br>（参考：全体の中央値は $\\frac{9+11}{2}=10$。）範囲 $20-3=17$ と混同しないこと。"}, {"id": 31, "domain": "1変数データ", "difficulty": "応用", "type": "single", "q": "次の5個のデータについて、公式 $s^2=\\overline{x^2}-(\\bar{x})^2$（2乗の平均 引く 平均の2乗）を用いて分散（標本分散）を求めよ。 $\\{1,2,3,4,5\\}$", "options": ["2", "2.5", "10", "11"], "answer": [0], "explanation": "分散は偏差を計算しなくても『2乗の平均 − 平均の2乗』で出せる（計算が速い）。<br>①平均：$\\bar{x}=\\frac{1+2+3+4+5}{5}=3$。よって $(\\bar{x})^2=9$。<br>②2乗の平均：$\\overline{x^2}=\\frac{1+4+9+16+25}{5}=\\frac{55}{5}=11$。<br>③$s^2=11-9=2$。<br>検算（定義式）：偏差 $-2,-1,0,1,2$、平方 $4,1,0,1,4$、和 $10$、$\\div5=2$。一致。なお不偏分散なら $10\\div4=2.5$。"}, {"id": 32, "domain": "1変数データ", "difficulty": "応用", "type": "single", "q": "下の度数分布（合計30人）について、中央値が含まれる階級はどれか。", "options": ["[10,20)", "[20,30)", "[30,40)", "[40,50)"], "answer": [1], "explanation": "中央値の『位置』を累積度数で探す。$n=30$ なので中央値は小さい順に15番目と16番目の値の間。<br>累積度数を順に作る：$[0,10)$ までで4人、$[10,20)$ までで $4+6=10$ 人、$[20,30)$ までで $10+10=20$ 人。<br>15番目・16番目はどちらも『10人を超え20人まで』の範囲、すなわち $[20,30)$ の階級に入る。<br>コツ：度数分布での中央値は、累積度数が $n/2$ を初めて超える階級にある。", "figure": {"type": "histogram", "edges": [0, 10, 20, 30, 40, 50], "freqs": [4, 6, 10, 5, 5], "xlabel": "値", "ylabel": "度数"}}, {"id": 33, "domain": "1変数データ", "difficulty": "応用", "type": "single", "q": "データ $\\{8,10,11,12,13,15,30\\}$ について、1.5×IQRルールで外れ値となる値はどれか。四分位数は中央値を除いた下位・上位の中央値とする。", "options": ["8", "15", "30", "外れ値はない"], "answer": [2], "explanation": "手順で境界を作り、各値が外にあるか調べる。<br>①中央値（4番目）$=12$。下位 $\\{8,10,11\\}\\Rightarrow Q_1=10$、上位 $\\{13,15,30\\}\\Rightarrow Q_3=15$。<br>②$\\mathrm{IQR}=15-10=5$。<br>③上側境界 $=Q_3+1.5\\times5=15+7.5=22.5$、下側境界 $=Q_1-1.5\\times5=10-7.5=2.5$。<br>④各値を判定：$30>22.5$ なので $30$ は外れ値。他は $2.5$〜$22.5$ の範囲内。<br>よって外れ値は $30$ のみ。"}, {"id": 34, "domain": "2変数データ", "difficulty": "応用", "type": "single", "q": "5組のデータについて次の偏差積和・偏差平方和が得られた：$S_{xy}=\\sum(x-\\bar{x})(y-\\bar{y})=6$、$S_{xx}=\\sum(x-\\bar{x})^2=10$、$S_{yy}=\\sum(y-\\bar{y})^2=6$。相関係数 $r$ に最も近いものはどれか。", "options": ["0.60", "0.77", "0.85", "0.97"], "answer": [1], "explanation": "相関係数は偏差積和・偏差平方和から $r=\\dfrac{S_{xy}}{\\sqrt{S_{xx}\\,S_{yy}}}$ で計算できる（各和を $n$ で割っても比は同じなので、和のまま入れてよい）。<br>代入：$r=\\dfrac{6}{\\sqrt{10\\times6}}=\\dfrac{6}{\\sqrt{60}}$。$\\sqrt{60}\\approx7.75$ なので $r\\approx\\dfrac{6}{7.75}\\approx0.77$。<br>確認：$-1\\le r\\le1$ の範囲に収まっており、正の相関。実試験ではこの『和の形』で与えられることが多いので、公式の形を覚えておく。"}, {"id": 35, "domain": "2変数データ", "difficulty": "応用", "type": "single", "q": "問題34と同じデータ（$S_{xy}=6,\\ S_{xx}=10$、$\\bar{x}=3,\\ \\bar{y}=4$）について回帰直線 $\\hat{y}=a+bx$ を求め、$x=6$ のときの予測値を答えよ。", "options": ["5.0", "5.2", "5.8", "6.2"], "answer": [2], "explanation": "手順は『傾き→切片→代入』。<br>①傾き：$b=\\dfrac{S_{xy}}{S_{xx}}=\\dfrac{6}{10}=0.6$。<br>②切片：回帰直線は重心 $(\\bar{x},\\bar{y})$ を通るので $a=\\bar{y}-b\\bar{x}=4-0.6\\times3=4-1.8=2.2$。<br>③回帰式 $\\hat{y}=2.2+0.6x$ に $x=6$ を代入：$\\hat{y}=2.2+0.6\\times6=2.2+3.6=5.8$。<br>注意：傾きの式は $b=S_{xy}/S_{xx}$（分母は $x$ の平方和）。$S_{yy}$ を使わない点に注意。"}, {"id": 36, "domain": "2変数データ", "difficulty": "標準", "type": "single", "q": "5組のデータで偏差積和が $\\sum(x-\\bar{x})(y-\\bar{y})=6$ であった。共分散 $s_{xy}$（$n$ で割る定義）はいくらか。", "options": ["1.2", "1.5", "6", "30"], "answer": [0], "explanation": "共分散は『偏差積和を $n$ で割ったもの』：$s_{xy}=\\dfrac{1}{n}\\sum(x-\\bar{x})(y-\\bar{y})=\\dfrac{6}{5}=1.2$。<br>共分散が正なので、$x$ と $y$ は同じ方向に動く（正の関係）。<br>注意：偏差積和 $S_{xy}=6$ そのものは『和』であって共分散ではない。$n$（または不偏なら $n-1$）で割って初めて共分散になる。相関係数はこの共分散を $s_x s_y$ で割ってさらに標準化したもの。"}, {"id": 37, "domain": "2変数データ", "difficulty": "標準", "type": "single", "q": "ある単回帰分析で相関係数が $r=-0.7$ であった。決定係数 $R^2$ と、その意味として正しい組はどれか。", "options": ["$R^2=0.49$：$y$ の変動の約49%が回帰で説明できる", "$R^2=-0.49$：負の相関なので決定係数も負", "$R^2=0.70$：$y$ の変動の70%が説明できる", "$R^2=0.84$：相関が強いので84%説明できる"], "answer": [0], "explanation": "決定係数は相関係数の2乗：$R^2=r^2=(-0.7)^2=0.49$。2乗するので符号は必ず正になり、負にはならない（選択肢2は誤り）。<br>意味：$y$ の全変動のうち約 $49\\%$ が回帰（＝$x$）で説明でき、残り約 $51\\%$ は説明できない。<br>よくある誤り：$|r|=0.7$ をそのまま『70%説明』と読む（選択肢3）。説明割合は $r$ ではなく $r^2$。"}, {"id": 38, "domain": "2変数データ", "difficulty": "応用", "type": "single", "q": "おおむね無相関に見える散布図に、右上に1点だけ極端に離れた点（高x・高y）を加えた。相関係数 $r$ はどう変化しやすいか。", "options": ["ほとんど変わらない", "見かけ上、正の方向に大きくなりやすい", "必ず0のまま", "必ず負になる"], "answer": [1], "explanation": "相関係数は外れ値に非常に敏感。右上（高x・高y）に離れた1点は『$x$ の偏差×$y$ の偏差』が大きな正の値になり、共分散を大きく押し上げる。<br>その結果、元は無相関でも見かけ上、正の相関が強く出やすい（逆に右下に離れた点なら負へ引っ張る）。<br>教訓：相関係数だけを鵜呑みにせず、必ず散布図で外れ値の有無を確認する。1点で結論が変わり得る。"}, {"id": 39, "domain": "1変数データ", "difficulty": "応用", "type": "single", "q": "ある投資の価値が1年目に1.2倍、2年目に0.8倍になった。2年間を通じた1年あたりの平均成長率（幾何平均）に最も近いものはどれか。", "options": ["1.00倍（変化なし）", "0.98倍（約2%減）", "1.04倍（約4%増）", "0.96倍（約4%減）"], "answer": [1], "explanation": "比率（倍率）の平均は、足して割る算術平均ではなく、掛けて累乗根をとる『幾何平均』を使う。<br>2年分の総合倍率は $1.2\\times0.8=0.96$。1年あたりの平均倍率はその平方根：$\\sqrt{0.96}\\approx0.98$。<br>つまり平均すると年あたり約2%の減少。算術平均 $\\frac{1.2+0.8}{2}=1.0$（変化なし）と思いがちだが誤り。実際、$1.2\\times0.8=0.96<1$ なので元本は2年で目減りしている。成長率・利率・倍率の平均は幾何平均、と覚える。"}];
+</script>
+<script>
+"use strict";
+(function(){
+  const LS = "toukei2_stats_v1";
+  const $ = id => document.getElementById(id);
+
+  function loadStats(){
+    let s; try{ s = JSON.parse(localStorage.getItem(LS)); }catch(e){ s=null; }
+    if(!s) s = {};
+    s.sessions = s.sessions||0; s.answered=s.answered||0; s.correct=s.correct||0;
+    s.best = s.best||0; s.history=s.history||[]; s.domains=s.domains||{}; s.review=s.review||[];
+    return s;
+  }
+  function saveStats(s){ try{ localStorage.setItem(LS, JSON.stringify(s)); }catch(e){} }
+  let stats = loadStats();
+
+  function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+  function arrEq(a,b){ if(a.length!==b.length) return false; const x=[...a].sort(),y=[...b].sort(); return x.every((v,i)=>v===y[i]); }
+  function domains(){ return [...new Set(QUESTIONS.map(q=>q.domain))]; }
+
+  // ---- SVG 図描画 ----
+  function svgWrap(inner,w,h){ return '<svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" role="img">'+inner+'</svg>'; }
+  function txt(x,y,s,opt){ opt=opt||{}; return '<text x="'+x+'" y="'+y+'" font-size="'+(opt.fs||10)+'" text-anchor="'+(opt.a||'middle')+'" fill="'+(opt.c||'#5d6471')+'">'+s+'</text>'; }
+  function line(x1,y1,x2,y2,c){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(c||'#c7ccd6')+'" stroke-width="1"/>'; }
+
+  function drawHistogram(f){
+    const W=360,H=240,L=42,R=12,T=12,B=34;
+    const n=f.freqs.length, maxf=Math.max(...f.freqs);
+    const pw=W-L-R, ph=H-T-B, bw=pw/n;
+    let s="";
+    s+=line(L,T+ph,W-R,T+ph); s+=line(L,T,L,T+ph);
+    const ticks=4;
+    for(let t=0;t<=ticks;t++){ const v=Math.round(maxf*t/ticks); const y=T+ph-(ph*t/ticks);
+      s+=line(L,y,W-R,y,'#eef0f4'); s+=txt(L-5,y+3,v,{a:'end',fs:9}); }
+    for(let i=0;i<n;i++){ const h=ph*(f.freqs[i]/maxf); const x=L+i*bw, y=T+ph-h;
+      s+='<rect x="'+(x+1)+'" y="'+y+'" width="'+(bw-2)+'" height="'+h+'" fill="#7f77dd" stroke="#534ab7" stroke-width="0.5"/>'; }
+    for(let i=0;i<=n;i++){ const x=L+i*bw; s+=txt(x,T+ph+14,f.edges[i],{fs:9}); }
+    s+=txt((L+W-R)/2,H-4,f.xlabel||"",{c:'#5d6471'});
+    if(f.ylabel) s+='<text x="12" y="'+(T+ph/2)+'" font-size="10" fill="#5d6471" transform="rotate(-90 12 '+(T+ph/2)+')" text-anchor="middle">'+f.ylabel+'</text>';
+    return svgWrap(s,W,H);
+  }
+
+  function drawBoxplot(f){
+    const W=360,H=140,L=20,R=20,T=30,B=40;
+    const vals=[f.min,f.q1,f.med,f.q3,f.max];
+    const lo=Math.min(...vals), hi=Math.max(...vals), pad=(hi-lo)*0.08||1;
+    const a=lo-pad, b=hi+pad, pw=W-L-R;
+    const X=v=>L+pw*(v-a)/(b-a);
+    const cy=T+20, bh=34;
+    let s="";
+    s+=line(X(f.min),cy,X(f.q1),cy,'#888'); s+=line(X(f.q3),cy,X(f.max),cy,'#888');
+    s+=line(X(f.min),cy-9,X(f.min),cy+9,'#888'); s+=line(X(f.max),cy-9,X(f.max),cy+9,'#888');
+    s+='<rect x="'+X(f.q1)+'" y="'+(cy-bh/2)+'" width="'+(X(f.q3)-X(f.q1))+'" height="'+bh+'" fill="#eef0fb" stroke="#534ab7" stroke-width="1"/>';
+    s+=line(X(f.med),cy-bh/2,X(f.med),cy+bh/2,'#534ab7');
+    // 軸
+    const ay=cy+bh/2+18; s+=line(L,ay,W-R,ay,'#c7ccd6');
+    vals.forEach(v=>{ s+=line(X(v),ay-3,X(v),ay+3,'#c7ccd6'); s+=txt(X(v),ay+15,v,{fs:9}); });
+    s+=txt((L+W-R)/2,H-4,f.xlabel||"",{});
+    return svgWrap(s,W,H);
+  }
+
+  function drawScatter(f){
+    const W=360,H=240,L=42,R=14,T=14,B=34;
+    const xs=f.points.map(p=>p[0]), ys=f.points.map(p=>p[1]);
+    let xlo=Math.min(...xs),xhi=Math.max(...xs),ylo=Math.min(...ys),yhi=Math.max(...ys);
+    const xpad=(xhi-xlo)*0.1||1, ypad=(yhi-ylo)*0.1||1;
+    xlo-=xpad;xhi+=xpad;ylo-=ypad;yhi+=ypad; if(ylo>0)ylo=0;
+    const pw=W-L-R, ph=H-T-B;
+    const X=v=>L+pw*(v-xlo)/(xhi-xlo), Y=v=>T+ph-ph*(v-ylo)/(yhi-ylo);
+    let s="";
+    s+=line(L,T+ph,W-R,T+ph); s+=line(L,T,L,T+ph);
+    for(let t=0;t<=4;t++){ const yv=ylo+(yhi-ylo)*t/4, y=Y(yv); s+=line(L,y,W-R,y,'#eef0f4'); s+=txt(L-5,y+3,Math.round(yv*10)/10,{a:'end',fs:9}); }
+    for(let t=0;t<=4;t++){ const xv=xlo+(xhi-xlo)*t/4; s+=txt(X(xv),T+ph+14,Math.round(xv*10)/10,{fs:9}); }
+    if(f.line){ const a=f.line.a,b=f.line.b; const x1=xlo,x2=xhi; s+='<line x1="'+X(x1)+'" y1="'+Y(a+b*x1)+'" x2="'+X(x2)+'" y2="'+Y(a+b*x2)+'" stroke="#d85a30" stroke-width="1.5"/>'; }
+    f.points.forEach(p=>{ s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="3.4" fill="#37419b"/>'; });
+    s+=txt((L+W-R)/2,H-4,f.xlabel||"",{});
+    if(f.ylabel) s+='<text x="12" y="'+(T+ph/2)+'" font-size="10" fill="#5d6471" transform="rotate(-90 12 '+(T+ph/2)+')" text-anchor="middle">'+f.ylabel+'</text>';
+    return svgWrap(s,W,H);
+  }
+
+  function renderFigure(f){ if(!f) return ""; if(f.type==="histogram")return drawHistogram(f); if(f.type==="boxplot")return drawBoxplot(f); if(f.type==="scatter")return drawScatter(f); return ""; }
+
+  function typeset(el){ if(window.renderMathInElement){ try{ renderMathInElement(el,{delimiters:[{left:"$",right:"$",display:false}]}); }catch(e){} } }
+
+  // ---- クイズ状態 ----
+  let session=null;
+
+  function buildSession(list,opt){
+    let qs=list.slice();
+    if(opt.order==="random") qs=shuffle(qs);
+    if(opt.count>0) qs=qs.slice(0,opt.count);
+    session={ items:qs.map(q=>{ const order=shuffle(q.options.map((_,i)=>i)); return {q, order}; }), idx:0, sel:[], done:false, correctCount:0, wrongIds:[] };
+  }
+
+  function show(view){ ["home","quiz","result"].forEach(v=>$(v).classList.toggle("hide",v!==view)); window.scrollTo(0,0); }
+
+  function renderDash(){
+    const acc = stats.answered? Math.round(100*stats.correct/stats.answered):0;
+    const recent = stats.history.slice(-12);
+    let trend="";
+    if(recent.length){ trend='<div class="sptrend">'+recent.map(v=>'<i style="height:'+Math.max(2,v)+'%" title="'+v+'%"></i>').join("")+'</div>'; }
+    let doms="";
+    domains().forEach(d=>{ const ds=stats.domains[d]; if(!ds||!ds.answered){ doms+='<div class="dom"><span class="nm">'+d+'</span><span class="pc muted">—</span></div>'; return; }
+      const pc=Math.round(100*ds.correct/ds.answered); const col= pc<70?'#d8453f': pc<85?'#e0a020':'#1d9e75';
+      doms+='<div class="dom"><span class="nm">'+d+'</span><span class="tr"><i style="width:'+pc+'%;background:'+col+'"></i></span><span class="pc">'+pc+'%</span></div>'; });
+    $("dash").innerHTML =
+      '<div class="stat-grid">'
+      +'<div class="stat"><div class="n">'+stats.sessions+'</div><div class="l">セッション数</div></div>'
+      +'<div class="stat"><div class="n">'+acc+'%</div><div class="l">累計正答率</div></div>'
+      +'<div class="stat"><div class="n">'+stats.best+'%</div><div class="l">ベスト正答率</div></div>'
+      +'<div class="stat"><div class="n">'+stats.answered+'</div><div class="l">累計回答数</div></div>'
+      +'</div>'
+      +(trend?'<div class="l muted" style="font-size:12px;margin-top:12px">直近の正答率の推移</div>'+trend:'')
+      +'<div class="l muted" style="font-size:12px;margin-top:14px">分野別の正答率（弱い順・70%未満は赤）</div>'
+      + sortDomHtml();
+  }
+  function sortDomHtml(){
+    const arr=domains().map(d=>{ const ds=stats.domains[d]; const pc=ds&&ds.answered?Math.round(100*ds.correct/ds.answered):null; return {d,pc,answered:ds?ds.answered:0}; });
+    arr.sort((a,b)=>{ if(a.pc===null)return 1; if(b.pc===null)return -1; return a.pc-b.pc; });
+    return arr.map(o=>{ if(o.pc===null) return '<div class="dom"><span class="nm">'+o.d+'</span><span class="tr"><i style="width:0%"></i></span><span class="pc muted">—</span></div>';
+      const col= o.pc<70?'#d8453f': o.pc<85?'#e0a020':'#1d9e75';
+      return '<div class="dom"><span class="nm">'+o.d+'</span><span class="tr"><i style="width:'+o.pc+'%;background:'+col+'"></i></span><span class="pc">'+o.pc+'%</span></div>'; }).join("");
+  }
+
+  function renderQuestion(){
+    const it=session.items[session.idx]; const q=it.q;
+    $("prog").style.width = Math.round(100*session.idx/session.items.length)+"%";
+    $("qpos").textContent = "問 "+(session.idx+1)+" / "+session.items.length;
+    $("qdom").textContent = q.domain;
+    $("qdiff").textContent = q.difficulty||"";
+    $("qdiff").style.display = q.difficulty?"":"none";
+    $("qfig").innerHTML = renderFigure(q.figure);
+    $("qtext").innerHTML = q.q + (q.type==="multi"?' <span class="muted">（複数選択）</span>':'');
+    session.sel=[]; session.answered=false;
+    const opts=$("opts"); opts.innerHTML="";
+    const marks=["①","②","③","④","⑤","⑥"];
+    it.order.forEach((origIdx,pos)=>{
+      const b=document.createElement("button"); b.className="opt"; b.dataset.orig=origIdx;
+      b.innerHTML='<span class="mk">'+marks[pos]+'</span>'+q.options[origIdx];
+      b.onclick=()=>toggle(b,origIdx);
+      opts.appendChild(b);
+    });
+    $("expl").className="expl"; $("expl").innerHTML="";
+    $("btnCheck").classList.remove("hide"); $("btnNext").classList.add("hide");
+    typeset($("qtext")); typeset(opts);
+  }
+
+  function toggle(b,origIdx){
+    if(session.answered) return;
+    const q=session.items[session.idx].q;
+    if(q.type==="multi"){
+      const i=session.sel.indexOf(origIdx);
+      if(i>=0){session.sel.splice(i,1);b.classList.remove("sel");}
+      else{session.sel.push(origIdx);b.classList.add("sel");}
+    }else{
+      session.sel=[origIdx];
+      [...$("opts").children].forEach(c=>c.classList.toggle("sel",+c.dataset.orig===origIdx));
+    }
+  }
+
+  function check(){
+    if(session.answered) return;
+    if(session.sel.length===0) return;
+    const q=session.items[session.idx].q;
+    const ok=arrEq(session.sel,q.answer);
+    session.answered=true;
+    [...$("opts").children].forEach(c=>{ const oi=+c.dataset.orig; c.onclick=null;
+      if(q.answer.includes(oi)) c.classList.add("correct");
+      else if(session.sel.includes(oi)) c.classList.add("wrong");
+      c.classList.remove("sel");
+    });
+    const e=$("expl");
+    e.innerHTML='<span class="tag '+(ok?'ok':'ng')+'">'+(ok?'正解':'不正解')+'</span><br>'+q.explanation;
+    e.classList.add("show"); typeset(e);
+    if(ok){ session.correctCount++; } else { session.wrongIds.push(q.id); }
+    // 統計更新（1問ごと）
+    stats.answered++; if(ok)stats.correct++;
+    stats.domains[q.domain]=stats.domains[q.domain]||{answered:0,correct:0};
+    stats.domains[q.domain].answered++; if(ok)stats.domains[q.domain].correct++;
+    // 復習プール
+    const ri=stats.review.indexOf(q.id);
+    if(ok){ if(ri>=0)stats.review.splice(ri,1); } else { if(ri<0)stats.review.push(q.id); }
+    saveStats(stats);
+    $("btnCheck").classList.add("hide"); $("btnNext").classList.remove("hide");
+    $("btnNext").textContent = (session.idx+1<session.items.length)?"次へ":"結果を見る";
+  }
+
+  function next(){
+    if(session.idx+1<session.items.length){ session.idx++; renderQuestion(); }
+    else finish();
+  }
+
+  function finish(){
+    const total=session.items.length, c=session.correctCount;
+    const pc=total?Math.round(100*c/total):0;
+    stats.sessions++; stats.history.push(pc); if(stats.history.length>50)stats.history=stats.history.slice(-50);
+    if(pc>stats.best)stats.best=pc; saveStats(stats);
+    $("rScore").textContent=c+" / "+total+"（"+pc+"%）";
+    $("rDetail").textContent= session.wrongIds.length? ("間違い "+session.wrongIds.length+" 問は復習プールに追加されました"):"全問正解！";
+    lastWrong=session.wrongIds.slice();
+    $("btnReviewWrong").classList.toggle("hide", lastWrong.length===0);
+    show("result");
+  }
+  let lastWrong=[];
+
+  // ---- イベント ----
+  function fillDomainSelect(){ const sel=$("selDomain"); sel.innerHTML='<option value="__all">すべての分野</option>'+domains().map(d=>'<option value="'+d+'">'+d+'</option>').join(""); }
+  function updateReviewBtn(){ $("reviewCount").textContent = stats.review.length? "（"+stats.review.length+"問）":"（0問）"; $("btnReview").disabled = stats.review.length===0; $("btnReview").style.opacity = stats.review.length?1:.5; }
+
+  $("btnStart").onclick=()=>{
+    const d=$("selDomain").value, diff=$("selDiff").value;
+    let list = QUESTIONS.slice();
+    if(d!=="__all") list=list.filter(q=>q.domain===d);
+    if(diff!=="__all") list=list.filter(q=>(q.difficulty||"")===diff);
+    if(!list.length){ alert("この条件に合う問題がありません。条件を変えてください。"); return; }
+    buildSession(list,{count:+$("selCount").value, order:$("selOrder").value});
+    show("quiz"); renderQuestion();
+  };
+  $("btnReview").onclick=()=>{
+    const list=QUESTIONS.filter(q=>stats.review.includes(q.id)); if(!list.length)return;
+    buildSession(list,{count:0, order:"random"}); show("quiz"); renderQuestion();
+  };
+  $("btnCheck").onclick=check;
+  $("btnNext").onclick=next;
+  $("btnQuit").onclick=()=>{ refreshHome(); show("home"); };
+  $("btnAgain").onclick=()=>{ $("btnStart").onclick(); };
+  $("btnReviewWrong").onclick=()=>{ const list=QUESTIONS.filter(q=>lastWrong.includes(q.id)); if(!list.length)return; buildSession(list,{count:0,order:"random"}); show("quiz"); renderQuestion(); };
+  $("btnHome").onclick=()=>{ refreshHome(); show("home"); };
+  $("btnReset").onclick=()=>{ if(confirm("学習記録（正答率・復習プールなど）をすべて消去します。よろしいですか？")){ stats={}; stats=loadStats(); localStorage.removeItem(LS); stats=loadStats(); refreshHome(); } };
+
+  function refreshHome(){ stats=loadStats(); renderDash(); updateReviewBtn(); }
+
+  // 初期化
+  fillDomainSelect(); refreshHome();
+})();
+</script>
+</body>
+</html>
