@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>AZ-900 練習問題</title>
+<link rel="apple-touch-icon" href="../icon.png">
+<link rel="icon" href="../icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="AZ-900">
+<meta name="application-name" content="AZ-900">
+<style>
+  :root{
+    --bg:#0f1220; --card:#1a1f33; --card2:#222843; --text:#e8ebf5; --muted:#9aa3c4;
+    --accent:#4f8cff; --accent2:#7c5cff; --ok:#2ecc71; --ng:#ff5c72; --warn:#ffb454; --line:#2c3350;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(160deg,#0f1220,#141a30);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    line-height:1.7;padding:16px;min-height:100vh}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:1.4rem;margin:.2em 0}
+  .sub{color:var(--muted);font-size:.9rem;margin-bottom:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:20px;margin-bottom:16px;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+  .card h2{font-size:1rem;margin:0 0 12px}
+  label.field{display:block;color:var(--muted);font-size:.85rem;margin:10px 0 4px}
+  select,button{font:inherit}
+  select{background:var(--card2);color:var(--text);border:1px solid var(--line);
+    border-radius:10px;padding:11px 12px;width:100%}
+  .btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;
+    border-radius:12px;padding:14px 20px;font-weight:700;cursor:pointer;transition:.15s;width:100%}
+  .btn:hover{filter:brightness(1.08)} .btn:active{transform:translateY(1px)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .btn.secondary{background:var(--card2);border:1px solid var(--line)}
+  .btn.review{background:linear-gradient(135deg,#ff8a3d,#ff5c72)}
+  .meta{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:var(--muted);margin-bottom:8px}
+  .bar{height:7px;background:var(--card2);border-radius:99px;overflow:hidden;margin-bottom:18px}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:.3s}
+  .tag{display:inline-block;font-size:.72rem;background:var(--card2);border:1px solid var(--line);
+    color:var(--muted);padding:3px 9px;border-radius:99px;margin-bottom:10px}
+  .qtext{font-size:1.08rem;font-weight:600;margin:6px 0 16px}
+  .opt{display:flex;gap:11px;align-items:flex-start;background:var(--card2);border:1px solid var(--line);
+    border-radius:12px;padding:13px 15px;margin-bottom:10px;cursor:pointer;transition:.12s}
+  .opt:hover{border-color:var(--accent)}
+  .opt.sel{border-color:var(--accent);background:#26305a}
+  .opt.correct{border-color:var(--ok);background:rgba(46,204,113,.14)}
+  .opt.wrong{border-color:var(--ng);background:rgba(255,92,114,.14)}
+  .opt .box{width:22px;height:22px;border-radius:6px;border:2px solid var(--muted);flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;font-size:.8rem;margin-top:2px}
+  .opt.round .box{border-radius:50%}
+  .hint{font-size:.78rem;color:var(--muted);margin:-2px 0 12px}
+  .explain{background:var(--card2);border-radius:12px;padding:14px 16px;margin-top:6px;font-size:.95rem;border:1px solid var(--line)}
+  .explain.ok{background:rgba(46,204,113,.10);border-color:rgba(46,204,113,.4)}
+  .explain.ng{background:rgba(255,92,114,.10);border-color:rgba(255,92,114,.4)}
+  .explain b{color:var(--text)}
+  .center{text-align:center}
+  .big{font-size:2.6rem;font-weight:800;margin:6px 0}
+  .muted{color:var(--muted)}
+  .pill{display:inline-block;font-size:.8rem;padding:4px 10px;border-radius:99px;background:var(--card2);border:1px solid var(--line)}
+  .reviewItem{border-left:3px solid var(--ng);padding:6px 0 6px 12px;margin:8px 0;font-size:.9rem}
+  .hide{display:none}
+  .footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:10px}
+  .stats{display:flex;gap:10px;margin-bottom:8px}
+  .stat{flex:1;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+  .stat .n{font-size:1.5rem;font-weight:800} .stat .l{font-size:.72rem;color:var(--muted)}
+  .domrow{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:.82rem}
+  .domrow .nm{width:150px;flex:0 0 auto;color:var(--muted)}
+  .domrow .track{flex:1;height:9px;background:var(--card2);border-radius:99px;overflow:hidden}
+  .domrow .fill{height:100%;border-radius:99px}
+  .domrow .pc{width:42px;text-align:right;flex:0 0 auto}
+  .trend{font-size:.85rem;color:var(--muted);margin-top:4px}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- START -->
+  <div id="start">
+    <h1>AZ-900 練習問題 ☁️</h1>
+    <div class="sub">Azure Fundamentals ／ 全<span id="qtotal">0</span>問・本番形式・解説付き</div>
+
+    <div class="card" id="dashCard">
+      <h2>📊 学習ダッシュボード</h2>
+      <div id="dashBody"></div>
+    </div>
+
+    <div class="card" id="reviewCard">
+      <h2>🔁 復習モード</h2>
+      <div id="reviewInfo" class="muted" style="margin-bottom:12px"></div>
+      <button class="btn review" id="reviewBtn" onclick="startQuiz('review')">間違えた問題を復習する</button>
+    </div>
+
+    <div class="card">
+      <h2>📝 通常演習</h2>
+      <label class="field">ドメイン（出題分野）</label>
+      <select id="selDomain"></select>
+      <label class="field">出題数</label>
+      <select id="selCount">
+        <option value="10">10問（本番ミニ）</option>
+        <option value="5">5問（さくっと）</option>
+        <option value="20">20問</option>
+        <option value="40">40問（本番想定）</option>
+        <option value="999">全問</option>
+      </select>
+      <label class="field">出題順</label>
+      <select id="selOrder">
+        <option value="random">ランダム</option>
+        <option value="seq">順番通り</option>
+      </select>
+      <div style="height:14px"></div>
+      <button class="btn" onclick="startQuiz('normal')">スタート ▶</button>
+    </div>
+    <div class="footer">合格目安: 正答率70%（本番は700/1000）</div>
+    <div class="footer"><a href="../" style="color:var(--muted)">← 学習アプリTOPへ</a></div>
+    <div class="footer"><a href="#" onclick="resetAll();return false;" style="color:var(--muted)">学習記録をリセット</a></div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz" class="hide">
+    <div class="meta">
+      <span id="qProgress">1 / 10</span>
+      <span id="qScore">正解 0</span>
+    </div>
+    <div class="bar"><i id="qBar"></i></div>
+    <div class="card">
+      <span class="tag" id="qDomain"></span>
+      <div class="qtext" id="qText"></div>
+      <div class="hint" id="qHint"></div>
+      <div id="qOptions"></div>
+      <div id="qExplain"></div>
+      <div style="height:8px"></div>
+      <button class="btn" id="qAction" onclick="onAction()">解答する</button>
+    </div>
+    <button class="btn secondary" onclick="showStart()">中断してトップへ</button>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result" class="hide">
+    <div class="card center">
+      <div class="muted" id="rMode">結果</div>
+      <div class="big" id="rScore">0 / 0</div>
+      <div id="rPct" class="pill"></div>
+      <div id="rMsg" style="margin-top:14px;font-weight:600"></div>
+    </div>
+    <div class="card" id="rReviewCard">
+      <h2>復習（間違えた問題）</h2>
+      <div id="rReview"></div>
+    </div>
+    <button class="btn review" id="rReviewBtn" onclick="startQuiz('review')" style="margin-bottom:10px">間違いをすぐ復習 🔁</button>
+    <button class="btn secondary" onclick="showStart()">トップへ戻る</button>
+  </div>
+
+  <div class="footer">study-apps ／ AZ-900</div>
+</div>
+
+<script>
+/* ===== 問題データ ===== */
+const QUESTIONS = [{"id": 1, "domain": "クラウドの概念", "type": "single", "q": "クラウドコンピューティングの「従量課金（消費ベース）」モデルの特徴として最も適切なものはどれですか？", "options": ["使った分だけ料金を支払う", "利用量に関係なく定額", "ハードウェアを前払いで購入する", "無料で無制限に使える"], "answer": [0], "explanation": "クラウドは消費ベース課金で、実際に使ったリソース量に応じて支払います。これにより初期投資（CapEx）を抑え、運用コスト（OpEx）として柔軟に支出できます。"}, {"id": 2, "domain": "クラウドの概念", "type": "single", "q": "設備投資（CapEx）ではなく運用支出（OpEx）の例はどれですか？", "options": ["クラウドVMの月額利用料", "自社サーバーの購入", "データセンターの建設", "ネットワーク機器の一括購入"], "answer": [0], "explanation": "OpExは継続的な運用費用で、クラウドの従量課金がこれに当たります。CapExはサーバー購入や施設建設のような先行投資です。"}, {"id": 3, "domain": "クラウドの概念", "type": "single", "q": "クラウドの「スケーラビリティ（拡張性）」を最もよく表すものはどれですか？", "options": ["需要に応じてリソースを増減できる", "データが暗号化される", "物理的に安全な施設", "常に同じ性能を保つ"], "answer": [0], "explanation": "スケーラビリティは負荷に応じてリソースを追加・削減できる能力です。自動で増減する性質は特にエラスティシティ（弾力性）と呼ばれます。"}, {"id": 4, "domain": "クラウドの概念", "type": "single", "q": "VMのサイズ（CPU・メモリ）を大きくして性能を上げる方法を何と呼びますか？", "options": ["垂直スケーリング（スケールアップ）", "水平スケーリング（スケールアウト）", "ロードバランシング", "フェールオーバー"], "answer": [0], "explanation": "垂直スケーリング（スケールアップ）は1台のリソースを増強します。台数を増やすのは水平スケーリング（スケールアウト）です。"}, {"id": 5, "domain": "クラウドの概念", "type": "single", "q": "インスタンスの「台数」を増やして負荷に対応する方法はどれですか？", "options": ["水平スケーリング（スケールアウト）", "垂直スケーリング（スケールアップ）", "ダウングレード", "スナップショット"], "answer": [0], "explanation": "水平スケーリングは同種のインスタンスを複数並べて処理能力を上げる方法で、クラウドの弾力性と相性が良い手法です。"}, {"id": 6, "domain": "クラウドの概念", "type": "single", "q": "IaaS・PaaS・SaaS のうち、利用者が「OSやミドルウェアの管理から解放され、アプリ開発に集中できる」モデルはどれですか？", "options": ["PaaS", "IaaS", "SaaS", "オンプレミス"], "answer": [0], "explanation": "PaaS（Platform as a Service）はOS・ランタイム・パッチ適用をクラウド側が管理し、利用者はアプリとデータに集中できます。Azure App ServiceがPaaSの例です。"}, {"id": 7, "domain": "クラウドの概念", "type": "single", "q": "利用者が仮想マシンのOSを自分で管理する必要があるサービスモデルはどれですか？", "options": ["IaaS", "PaaS", "SaaS", "FaaS"], "answer": [0], "explanation": "IaaS（Infrastructure as a Service）は仮想マシンなどのインフラを提供し、OSやミドルウェアの管理は利用者の責任です。最も柔軟性が高い反面、管理負担も大きいモデルです。"}, {"id": 8, "domain": "クラウドの概念", "type": "single", "q": "Microsoft 365 や Office 365 のように、完成したアプリをそのまま利用する形態はどれですか？", "options": ["SaaS", "PaaS", "IaaS", "ハイブリッド"], "answer": [0], "explanation": "SaaS（Software as a Service）は完成したソフトウェアをインターネット越しに利用する形態で、利用者の管理範囲が最も小さいモデルです。"}, {"id": 9, "domain": "クラウドの概念", "type": "single", "q": "オンプレミスとパブリッククラウドを組み合わせて使う展開モデルはどれですか？", "options": ["ハイブリッドクラウド", "パブリッククラウド", "プライベートクラウド", "コミュニティクラウド"], "answer": [0], "explanation": "ハイブリッドクラウドはオンプレミス（またはプライベートクラウド）とパブリッククラウドを連携させ、双方の利点を活かす構成です。"}, {"id": 10, "domain": "クラウドの概念", "type": "single", "q": "自社専用の環境としてクラウド技術を利用する展開モデルはどれですか？", "options": ["プライベートクラウド", "パブリッククラウド", "ハイブリッドクラウド", "マルチテナント"], "answer": [0], "explanation": "プライベートクラウドは単一組織専用のクラウド環境です。管理は自社や委託先が担い、より高い制御とセキュリティを得られますが、コスト負担は大きくなります。"}, {"id": 11, "domain": "クラウドの概念", "type": "multi", "q": "クラウドの責任共有モデルにおいて、サービスモデルに関わらず常に「利用者」の責任となるものを2つ選んでください。", "options": ["データと情報", "アカウントとアクセス管理", "物理ホストのセキュリティ", "物理ネットワーク"], "answer": [0, 1], "explanation": "責任共有モデルでは、データ／情報とアカウント・アクセス管理は常に利用者の責任です。物理的なホスト・ネットワーク・データセンターは常にクラウド事業者の責任です。"}, {"id": 12, "domain": "クラウドの概念", "type": "single", "q": "「高可用性（High Availability）」が意味するものとして最も適切なものはどれですか？", "options": ["システムが停止せず継続して利用できる割合が高いこと", "データを暗号化すること", "コストが安いこと", "処理が速いこと"], "answer": [0], "explanation": "高可用性は、システムが停止することなく稼働し続けられる能力を指し、通常SLAの稼働率（%）で表されます。"}, {"id": 13, "domain": "クラウドの概念", "type": "single", "q": "災害発生時にデータやシステムを復旧できる能力を何と呼びますか？", "options": ["ディザスターリカバリー", "スケーラビリティ", "アジリティ", "マルチテナンシー"], "answer": [0], "explanation": "ディザスターリカバリー（DR）は、災害や大規模障害からシステム・データを復旧する能力です。クラウドは地理的に離れたリージョンを使ったDRを容易にします。"}, {"id": 14, "domain": "クラウドの概念", "type": "single", "q": "新しいリソースをすばやく展開・廃棄できるクラウドの利点を何と呼びますか？", "options": ["アジリティ（俊敏性）", "可用性", "耐久性", "一貫性"], "answer": [0], "explanation": "アジリティはリソースを迅速に展開・変更・廃棄できる能力で、市場変化への素早い対応を可能にします。"}, {"id": 15, "domain": "クラウドの概念", "type": "single", "q": "需要の増減に合わせてリソースが自動的に増減する性質を何と呼びますか？", "options": ["弾力性（エラスティシティ）", "冗長性", "局所性", "移植性"], "answer": [0], "explanation": "弾力性（エラスティシティ）は負荷に応じて自動でスケールアウト／インする能力です。手動を含む拡張一般はスケーラビリティと呼ばれます。"}, {"id": 16, "domain": "クラウドの概念", "type": "single", "q": "クラウド導入で「初期の大規模なハードウェア投資が不要になる」ことの主な利点はどれですか？", "options": ["先行コスト（CapEx）の削減", "通信速度の向上", "物理的セキュリティの放棄", "データの自動生成"], "answer": [0], "explanation": "クラウドでは必要なときに必要な分だけ使うため、サーバー等の先行投資（CapEx）が不要になり、支出を運用費（OpEx）化できます。"}, {"id": 17, "domain": "クラウドの概念", "type": "single", "q": "複数の顧客が同じ物理インフラを論理的に分離して共有する仕組みを何と呼びますか？", "options": ["マルチテナンシー", "シングルテナンシー", "オンプレミス", "コロケーション"], "answer": [0], "explanation": "マルチテナンシーは、複数のテナント（顧客）が同じ基盤を論理的に分離して共有する方式です。コストを抑えつつ規模の経済を活かせます。"}, {"id": 18, "domain": "クラウドの概念", "type": "single", "q": "サーバーレス（例: Azure Functions）の主な利点として最も適切なものはどれですか？", "options": ["インフラ管理が不要で実行時のみ課金される", "常時VMを起動し続ける", "OSのパッチを自分で当てる", "物理サーバーを購入する"], "answer": [0], "explanation": "サーバーレスはインフラ管理が不要で、コードの実行（イベント）に応じてのみ課金されます。Azure Functionsが代表例です。"}, {"id": 19, "domain": "アーキテクチャとサービス", "type": "single", "q": "Azureで関連リソースをまとめて管理・削除できる論理コンテナーはどれですか？", "options": ["リソースグループ", "管理グループ", "サブスクリプション", "リージョン"], "answer": [0], "explanation": "リソースグループは、VMやストレージなど関連リソースをまとめる論理コンテナーです。グループ単位で展開・管理・削除や権限付与ができます。"}, {"id": 20, "domain": "アーキテクチャとサービス", "type": "single", "q": "複数のサブスクリプションをまとめてポリシーやアクセスを一括管理する階層はどれですか？", "options": ["管理グループ", "リソースグループ", "可用性ゾーン", "テナント"], "answer": [0], "explanation": "管理グループはサブスクリプションの上位階層で、複数サブスクリプションに対してポリシーやRBACをまとめて適用できます。"}, {"id": 21, "domain": "アーキテクチャとサービス", "type": "single", "q": "Azureの課金とリソースの境界となる単位はどれですか？", "options": ["サブスクリプション", "リソースグループ", "リージョン", "タグ"], "answer": [0], "explanation": "サブスクリプションは課金と管理の境界です。組織はサブスクリプションを分けて、コストや権限、クォータを区切ります。"}, {"id": 22, "domain": "アーキテクチャとサービス", "type": "single", "q": "同一リージョン内で、独立した電源・冷却・ネットワークを持つ物理的に分離した場所を何と呼びますか？", "options": ["可用性ゾーン", "リージョンペア", "リソースグループ", "サブネット"], "answer": [0], "explanation": "可用性ゾーン（Availability Zone）はリージョン内で物理的に分離されたデータセンター群で、ゾーン間に分散することでデータセンター障害に耐えられます。"}, {"id": 23, "domain": "アーキテクチャとサービス", "type": "single", "q": "Azureリージョンが約数百マイル離れた別リージョンと組になり、災害復旧に使われる仕組みを何と呼びますか？", "options": ["リージョンペア", "可用性ゾーン", "ペアリングゾーン", "エッジロケーション"], "answer": [0], "explanation": "リージョンペアは地理的に離れた2つのリージョンの組で、計画メンテナンスは片方ずつ行われ、広域災害時の復旧にも利用されます。"}, {"id": 24, "domain": "アーキテクチャとサービス", "type": "single", "q": "すべてのAzureリソースの作成・更新・削除を担う、デプロイと管理の統合レイヤーはどれですか？", "options": ["Azure Resource Manager（ARM）", "Azure Monitor", "Azure Advisor", "Azure Policy"], "answer": [0], "explanation": "Azure Resource Manager（ARM）は、ポータル・CLI・PowerShell・ARMテンプレートからの要求を受け付け、リソースの展開と管理を一元的に処理します。"}, {"id": 25, "domain": "アーキテクチャとサービス", "type": "single", "q": "フルマネージドでWebアプリやAPIをホストできるPaaSサービスはどれですか？", "options": ["Azure App Service", "Azure Virtual Machines", "Azure Blob Storage", "Azure ExpressRoute"], "answer": [0], "explanation": "Azure App ServiceはWebアプリやAPIをホストするPaaSで、OSやインフラの管理が不要です。スケーリングやデプロイも容易です。"}, {"id": 26, "domain": "アーキテクチャとサービス", "type": "single", "q": "イベント駆動で短時間のコードを実行する、サーバーレスのコンピューティングサービスはどれですか？", "options": ["Azure Functions", "Azure Kubernetes Service", "Azure SQL Database", "Azure Virtual Network"], "answer": [0], "explanation": "Azure Functionsはイベントに応じてコードを実行するサーバーレスサービスで、実行時のみ課金されます。"}, {"id": 27, "domain": "アーキテクチャとサービス", "type": "single", "q": "コンテナー化されたアプリを大規模にオーケストレーションするAzureのマネージドサービスはどれですか？", "options": ["Azure Kubernetes Service（AKS）", "Azure App Service", "Azure Functions", "Azure Batch"], "answer": [0], "explanation": "AKSはKubernetesのマネージドサービスで、多数のコンテナーのデプロイ・スケール・管理を自動化します。単一コンテナーを手軽に動かすにはAzure Container Instancesが適します。"}, {"id": 28, "domain": "アーキテクチャとサービス", "type": "single", "q": "クラウド上にWindowsデスクトップ環境を仮想化して提供するサービスはどれですか？", "options": ["Azure Virtual Desktop", "Azure App Service", "Azure Functions", "Azure Arc"], "answer": [0], "explanation": "Azure Virtual Desktop（AVD）は、クラウドでWindowsのデスクトップとアプリをVDIとして提供し、どこからでも安全にアクセスできます。"}, {"id": 29, "domain": "アーキテクチャとサービス", "type": "single", "q": "同一構成のVMを多数まとめて自動スケールできるサービスはどれですか？", "options": ["仮想マシンスケールセット", "Azure Functions", "Azure Container Instances", "Availability Set"], "answer": [0], "explanation": "仮想マシンスケールセット（VMSS）は同一構成のVM群を負荷に応じて自動的に増減できます。大規模な水平スケーリングに適しています。"}, {"id": 30, "domain": "アーキテクチャとサービス", "type": "single", "q": "Azure内の仮想ネットワーク同士をAzureバックボーン経由で接続する機能はどれですか？", "options": ["VNetピアリング", "VPN Gateway", "ExpressRoute", "DNSゾーン"], "answer": [0], "explanation": "VNetピアリングは仮想ネットワーク同士を低遅延・高帯域なAzureバックボーンで直接接続します。オンプレミスとの接続にはVPN GatewayやExpressRouteを使います。"}, {"id": 31, "domain": "アーキテクチャとサービス", "type": "single", "q": "オンプレミスとAzureをインターネットを経由せず専用線で接続するサービスはどれですか？", "options": ["ExpressRoute", "VPN Gateway", "VNetピアリング", "Application Gateway"], "answer": [0], "explanation": "ExpressRouteは通信事業者の専用接続を介してAzureに接続し、インターネットを経由しないため、高い信頼性・低遅延・セキュリティを提供します。"}, {"id": 32, "domain": "アーキテクチャとサービス", "type": "single", "q": "暗号化されたトンネルでインターネット越しにオンプレミスとAzureを接続する方法はどれですか？", "options": ["VPN Gateway（サイト間VPN）", "ExpressRoute", "VNetピアリング", "Load Balancer"], "answer": [0], "explanation": "VPN Gatewayはインターネット上にIPsec/IKEで暗号化トンネルを張り、オンプレミスとAzureを接続します。専用線が不要で導入しやすい一方、帯域や遅延はインターネット品質に依存します。"}, {"id": 33, "domain": "アーキテクチャとサービス", "type": "single", "q": "大量の非構造化データ（画像・動画・バックアップ等）の保存に最適なAzureストレージはどれですか？", "options": ["Blob Storage", "Azure Files", "Queue Storage", "Table Storage"], "answer": [0], "explanation": "Azure Blob Storageは画像・動画・ログ・バックアップなどの非構造化データ（オブジェクト）の格納に最適化されています。"}, {"id": 34, "domain": "アーキテクチャとサービス", "type": "single", "q": "SMB/NFSでマウントできる、クラウド上のマネージドファイル共有はどれですか？", "options": ["Azure Files", "Blob Storage", "Disk Storage", "Table Storage"], "answer": [0], "explanation": "Azure Filesは標準プロトコル（SMB/NFS）でマウント可能なフルマネージドのファイル共有で、オンプレミスのファイルサーバーの置き換えにも使えます。"}, {"id": 35, "domain": "アーキテクチャとサービス", "type": "single", "q": "アクセス頻度が非常に低く、長期保管向けで取り出しに時間がかかる最も安価なBlobのアクセス層はどれですか？", "options": ["アーカイブ層", "ホット層", "クール層", "プレミアム層"], "answer": [0], "explanation": "アーカイブ層は保存コストが最も安い一方、データの読み出し（リハイドレート）に時間がかかります。頻繁にアクセスするならホット層、たまになら クール／コールド層が適します。"}, {"id": 36, "domain": "アーキテクチャとサービス", "type": "single", "q": "データを別リージョンにも複製し、リージョン障害に備える冗長オプションはどれですか？", "options": ["geoゾーン冗長/geo冗長ストレージ（GRS/GZRS）", "ローカル冗長ストレージ（LRS）", "単一ディスク", "スナップショットのみ"], "answer": [0], "explanation": "GRS/GZRSはプライマリとは別のリージョンにもデータを複製し、リージョン規模の障害から保護します。LRSは単一データセンター内3重複製のみで、最も安価です。"}, {"id": 37, "domain": "アーキテクチャとサービス", "type": "single", "q": "グローバル分散・低遅延を特長とするAzureのマネージドNoSQLデータベースはどれですか？", "options": ["Azure Cosmos DB", "Azure SQL Database", "Azure Files", "Azure Cache for Redis"], "answer": [0], "explanation": "Azure Cosmos DBは複数リージョンに分散できるマネージドNoSQLで、世界規模で低遅延・高可用性を実現します。"}, {"id": 38, "domain": "アーキテクチャとサービス", "type": "single", "q": "フルマネージドのリレーショナルデータベース（PaaS）はどれですか？", "options": ["Azure SQL Database", "Azure Blob Storage", "Azure Cosmos DB", "Azure Table Storage"], "answer": [0], "explanation": "Azure SQL DatabaseはSQL Serverベースのフルマネージドなリレーショナルデータベース（PaaS）で、パッチ適用やバックアップを自動化します。"}, {"id": 39, "domain": "アーキテクチャとサービス", "type": "single", "q": "AzureのクラウドベースのID・アクセス管理サービス（旧Azure AD）はどれですか？", "options": ["Microsoft Entra ID", "Azure Policy", "Azure Monitor", "Microsoft Defender"], "answer": [0], "explanation": "Microsoft Entra ID（旧Azure Active Directory）は、ユーザー認証・SSO・MFAなどを提供するクラウドのID管理サービスです。"}, {"id": 40, "domain": "アーキテクチャとサービス", "type": "single", "q": "「あなたは誰か」を確認するプロセスを何と呼びますか？", "options": ["認証（Authentication）", "承認（Authorization）", "暗号化（Encryption）", "監査（Auditing）"], "answer": [0], "explanation": "認証（Authentication）は本人確認のプロセスです。確認後に「何を行えるか」を判断するのが承認（Authorization）です。"}, {"id": 41, "domain": "アーキテクチャとサービス", "type": "single", "q": "パスワードに加え、スマホアプリの承認やコードなど複数の要素で本人確認する仕組みはどれですか？", "options": ["多要素認証（MFA）", "シングルサインオン（SSO）", "ロールベースアクセス制御（RBAC）", "条件付きアクセス"], "answer": [0], "explanation": "多要素認証（MFA）は「知っているもの・持っているもの・自分自身」のうち複数を組み合わせて認証し、セキュリティを大幅に高めます。"}, {"id": 42, "domain": "アーキテクチャとサービス", "type": "single", "q": "一度サインインすれば複数のアプリに再認証なしでアクセスできる仕組みはどれですか？", "options": ["シングルサインオン（SSO）", "多要素認証（MFA）", "条件付きアクセス", "RBAC"], "answer": [0], "explanation": "シングルサインオン（SSO）は一度の認証で複数アプリにアクセスできる仕組みで、利便性とID管理の効率を高めます。"}, {"id": 43, "domain": "アーキテクチャとサービス", "type": "single", "q": "場所・デバイス・リスクなどの条件に基づいてアクセス可否やMFA要求を制御するEntraの機能はどれですか？", "options": ["条件付きアクセス", "リソースロック", "Azure Policy", "Blob ライフサイクル管理"], "answer": [0], "explanation": "条件付きアクセスは、ユーザー・場所・デバイス・リスクなどのシグナルに応じてアクセス制御（ブロックやMFA要求）を行うEntra IDの機能です。"}, {"id": 44, "domain": "アーキテクチャとサービス", "type": "single", "q": "単一のコンテナーを手早く実行したい場合に最も適したサービスはどれですか？", "options": ["Azure Container Instances（ACI）", "Azure Kubernetes Service", "Azure Virtual Machines", "Azure App Service"], "answer": [0], "explanation": "Azure Container Instances（ACI）はオーケストレーターを使わずに単一コンテナーを迅速に起動できます。大規模なオーケストレーションが必要ならAKSを使います。"}, {"id": 45, "domain": "アーキテクチャとサービス", "type": "single", "q": "オンプレミスや他クラウドのサーバー・Kubernetesを、Azureの管理面から一元管理できるサービスはどれですか？", "options": ["Azure Arc", "Azure Migrate", "Azure Bastion", "Azure Lighthouse"], "answer": [0], "explanation": "Azure Arcは、オンプレミスやマルチクラウド上のリソースをAzureの管理基盤（ポリシー・監視など）に取り込み一元管理します。"}, {"id": 46, "domain": "アーキテクチャとサービス", "type": "single", "q": "オンプレミス環境のAzureへの移行を評価・実行するためのサービスはどれですか？", "options": ["Azure Migrate", "Azure Monitor", "Azure Advisor", "Azure Policy"], "answer": [0], "explanation": "Azure Migrateは、サーバー・データベース・アプリの移行をアセスメントから実行まで一元的に支援するハブです。"}, {"id": 47, "domain": "管理とガバナンス", "type": "single", "q": "オンプレミスとAzureの総保有コストを比較見積もりするツールはどれですか？", "options": ["TCO（総保有コスト）計算ツール", "料金計算ツール", "Azure Advisor", "Cost Management"], "answer": [0], "explanation": "TCO計算ツールは、オンプレミス運用とAzure移行後のコストを比較し、削減効果を見積もるためのツールです。"}, {"id": 48, "domain": "管理とガバナンス", "type": "single", "q": "Azureサービスを構成して見積もり金額を事前に算出するツールはどれですか？", "options": ["料金計算ツール（Pricing Calculator）", "TCO計算ツール", "Cost Management + Billing", "Azure Monitor"], "answer": [0], "explanation": "料金計算ツール（Pricing Calculator）は、利用予定のサービスを選んで月額などの見積もりを作成します。実績コストの分析はCost Managementが担当します。"}, {"id": 49, "domain": "管理とガバナンス", "type": "single", "q": "実際のAzure利用コストを分析し、予算超過のアラートを設定できる機能はどれですか？", "options": ["Microsoft Cost Management", "料金計算ツール", "TCO計算ツール", "Service Health"], "answer": [0], "explanation": "Microsoft Cost Management（+ Billing）は、実際の支出の可視化・分析・予算設定・アラートを行います。見積もりは料金計算ツールが担います。"}, {"id": 50, "domain": "管理とガバナンス", "type": "single", "q": "リソースに付与してコストの分類や整理に使えるキーと値のメタデータを何と呼びますか？", "options": ["タグ", "ロック", "ポリシー", "ロール"], "answer": [0], "explanation": "タグはリソースに付ける「キー:値」のメタデータで、部署や環境ごとのコスト集計・整理に役立ちます。"}, {"id": 51, "domain": "管理とガバナンス", "type": "single", "q": "コスト・セキュリティ・信頼性・パフォーマンスの観点で改善を推奨してくれる無料サービスはどれですか？", "options": ["Azure Advisor", "Azure Monitor", "Azure Policy", "Microsoft Sentinel"], "answer": [0], "explanation": "Azure Advisorは利用状況を分析し、コスト最適化・セキュリティ・信頼性・パフォーマンス・優れた運用の観点で具体的な推奨事項を提示します。"}, {"id": 52, "domain": "管理とガバナンス", "type": "single", "q": "リソースの作成や構成を組織のルールに従わせ、準拠状況を監査・強制する機能はどれですか？", "options": ["Azure Policy", "リソースロック", "Azure Advisor", "Azure Blueprints"], "answer": [0], "explanation": "Azure Policyは、許可されるリージョンやSKU、必須タグなどのルールを定義し、準拠状況の監査や非準拠リソースの作成拒否を行います。"}, {"id": 53, "domain": "管理とガバナンス", "type": "single", "q": "重要なリソースの誤削除・誤変更を防ぐために設定する仕組みはどれですか？", "options": ["リソースロック（CanNotDelete / ReadOnly）", "タグ", "Azure Policy", "RBAC"], "answer": [0], "explanation": "リソースロックは、リソースに『削除禁止（CanNotDelete）』や『読み取り専用（ReadOnly）』を設定し、操作権限の有無に関わらず誤操作を防ぎます。"}, {"id": 54, "domain": "管理とガバナンス", "type": "single", "q": "ユーザーやグループに必要最小限の権限を割り当てるアクセス制御の仕組みはどれですか？", "options": ["ロールベースアクセス制御（RBAC）", "多要素認証", "条件付きアクセス", "リソースロック"], "answer": [0], "explanation": "RBACは、組み込み／カスタムのロールを通じて『誰が・何に・何をできるか』を最小権限で割り当てる仕組みです。"}, {"id": 55, "domain": "管理とガバナンス", "type": "single", "q": "アプリやインフラのメトリック・ログを収集して可視化・アラートする中核サービスはどれですか？", "options": ["Azure Monitor", "Azure Advisor", "Azure Policy", "Microsoft Purview"], "answer": [0], "explanation": "Azure Monitorは、メトリックやログを収集して可視化・アラート・自動対応を行う監視の中核です。ログのクエリにはLog Analyticsを使います。"}, {"id": 56, "domain": "管理とガバナンス", "type": "single", "q": "Azureサービス自体の障害・メンテナンス情報をユーザーに通知するサービスはどれですか？", "options": ["Azure Service Health", "Azure Advisor", "Azure Monitor", "Azure Policy"], "answer": [0], "explanation": "Azure Service Healthは、利用中サービスの障害・計画メンテナンス・正常性勧告など、Azure側の状況をパーソナライズして通知します。"}, {"id": 57, "domain": "管理とガバナンス", "type": "single", "q": "クラウドリソースのセキュリティ態勢を評価し、脅威からの保護を強化するサービスはどれですか？", "options": ["Microsoft Defender for Cloud", "Azure Advisor", "Azure Monitor", "Azure Migrate"], "answer": [0], "explanation": "Microsoft Defender for Cloudは、セキュリティスコアによる態勢評価と、ワークロードに対する脅威保護（CWPP）を提供します。"}, {"id": 58, "domain": "管理とガバナンス", "type": "single", "q": "ログを集約して脅威を検知・対応するAzureのクラウドネイティブSIEM/SOARはどれですか？", "options": ["Microsoft Sentinel", "Defender for Cloud", "Azure Monitor", "Azure Policy"], "answer": [0], "explanation": "Microsoft SentinelはクラウドネイティブなSIEM/SOARで、全社のログを集約して相関分析・脅威検知・自動対応を行います。"}, {"id": 59, "domain": "管理とガバナンス", "type": "single", "q": "「決して信頼せず常に検証する」を原則とするセキュリティモデルはどれですか？", "options": ["ゼロトラスト", "多層防御", "責任共有", "最小権限のみ"], "answer": [0], "explanation": "ゼロトラストは『Never trust, always verify』を原則とし、ネットワークの内外を問わずアクセスごとに明示的な検証を求めます。"}, {"id": 60, "domain": "管理とガバナンス", "type": "single", "q": "複数の防御層を重ねて段階的に保護する考え方を何と呼びますか？", "options": ["多層防御（Defense in Depth）", "ゼロトラスト", "責任共有モデル", "フェールオーバー"], "answer": [0], "explanation": "多層防御は、物理・ID・境界・ネットワーク・コンピューティング・アプリ・データといった複数の層で保護を重ね、1つが突破されても他で食い止める考え方です。"}, {"id": 61, "domain": "管理とガバナンス", "type": "single", "q": "ブラウザからCLIやPowerShellを使え、認証済みでツール準備が不要な対話環境はどれですか？", "options": ["Azure Cloud Shell", "Azure Portal", "Azure Mobile App", "ARMテンプレート"], "answer": [0], "explanation": "Azure Cloud Shellはブラウザ上で動作する対話型シェルで、Azure CLIとPowerShellをインストール不要・認証済みで利用できます。"}, {"id": 62, "domain": "管理とガバナンス", "type": "single", "q": "インフラをコード（JSON）で宣言的に定義し、繰り返し同じ環境を展開できるものはどれですか？", "options": ["ARMテンプレート", "Azure Portal", "Cloud Shell", "Azure Advisor"], "answer": [0], "explanation": "ARMテンプレート（およびBicep）は、リソース構成をコードで宣言的に定義し、再現性のある自動デプロイ（IaC）を実現します。"}, {"id": 63, "domain": "管理とガバナンス", "type": "single", "q": "Microsoftのコンプライアンス認証や監査レポートを確認できるポータルはどれですか？", "options": ["Service Trust Portal", "Azure Portal", "Trust Center 内の Cost Management", "Azure Advisor"], "answer": [0], "explanation": "Service Trust Portalでは、ISOやSOCなどの監査レポートやコンプライアンス関連ドキュメントを入手できます。"}, {"id": 64, "domain": "管理とガバナンス", "type": "single", "q": "複数サービスを組み合わせたアプリ全体の稼働率を表す指標を何と呼びますか？", "options": ["複合SLA", "個別SLA", "稼働クレジット", "RPO"], "answer": [0], "explanation": "複合SLA（Composite SLA）は、直列に依存する複数サービスのSLAを掛け合わせて算出する、アプリ全体としての見込み稼働率です。冗長化により向上させることもできます。"}, {"id": 65, "domain": "管理とガバナンス", "type": "single", "q": "AzureのSLAが満たされなかった場合に顧客が受け取れる一般的な補償はどれですか？", "options": ["サービスクレジット（料金の返金/割引）", "現金の即時送金", "無償のサポート契約", "リソースの自動増設"], "answer": [0], "explanation": "SLA未達の際は、通常サービスクレジット（請求額に対する割引・返金）が補償として提供されます。"}];
+
+const DOMAINS = [...new Set(QUESTIONS.map(q=>q.domain))];
+const LS_KEY = "az900_v1";
+const ABC = ["A","B","C","D","E","F"];
+
+/* ===== 学習記録（localStorage） ===== */
+function loadStats(){
+  let s; try{ s = JSON.parse(localStorage.getItem(LS_KEY)); }catch(e){ s=null; }
+  if(!s) s = {};
+  s.total = s.total||0; s.correct = s.correct||0;
+  s.dom = s.dom||{}; s.wrong = s.wrong||[]; s.hist = s.hist||[];
+  return s;
+}
+function saveStats(s){ try{ localStorage.setItem(LS_KEY, JSON.stringify(s)); }catch(e){} }
+let stats = loadStats();
+
+/* ===== 状態 ===== */
+let quiz = { list:[], idx:0, score:0, mode:"normal", revealed:false, sel:[], wrongThis:[] };
+
+/* ===== ユーティリティ ===== */
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function byId(id){ return QUESTIONS.find(q=>q.id===id); }
+function arrEq(a,b){ if(a.length!==b.length) return false; const x=[...a].sort(),y=[...b].sort(); return x.every((v,i)=>v===y[i]); }
+
+/* ===== 初期化 ===== */
+function init(){
+  document.getElementById("qtotal").textContent = QUESTIONS.length;
+  const sel = document.getElementById("selDomain");
+  sel.innerHTML = "";
+  const optAll = document.createElement("option");
+  optAll.value = "__all__"; optAll.textContent = "すべて（全"+QUESTIONS.length+"問）";
+  sel.appendChild(optAll);
+  DOMAINS.forEach(d=>{
+    const n = QUESTIONS.filter(q=>q.domain===d).length;
+    const o = document.createElement("option");
+    o.value = d; o.textContent = d+"（"+n+"問）";
+    sel.appendChild(o);
+  });
+  renderDash();
+  renderReviewInfo();
+}
+
+function renderDash(){
+  const el = document.getElementById("dashBody");
+  const acc = stats.total ? Math.round(stats.correct/stats.total*100) : 0;
+  if(stats.total===0){
+    el.innerHTML = '<div class="muted">まだ記録がありません。まずは10問やってみましょう。</div>';
+    return;
+  }
+  let h = '<div class="stats">'
+    + '<div class="stat"><div class="n">'+stats.total+'</div><div class="l">解答数</div></div>'
+    + '<div class="stat"><div class="n">'+acc+'%</div><div class="l">正答率</div></div>'
+    + '<div class="stat"><div class="n">'+stats.wrong.length+'</div><div class="l">要復習</div></div>'
+    + '</div>';
+  h += '<div style="height:6px"></div>';
+  DOMAINS.forEach(d=>{
+    const dd = stats.dom[d]||{a:0,c:0};
+    const p = dd.a ? Math.round(dd.c/dd.a*100) : 0;
+    const col = !dd.a ? "var(--line)" : (p>=70?"var(--ok)":(p>=40?"var(--warn)":"var(--ng)"));
+    h += '<div class="domrow"><div class="nm">'+d+'</div>'
+      + '<div class="track"><div class="fill" style="width:'+p+'%;background:'+col+'"></div></div>'
+      + '<div class="pc">'+(dd.a?p+'%':'—')+'</div></div>';
+  });
+  if(stats.hist.length){
+    const last = stats.hist.slice(-5).map(x=>x+'%').join(" → ");
+    h += '<div class="trend">直近の成績: '+last+'</div>';
+  }
+  el.innerHTML = h;
+}
+
+function renderReviewInfo(){
+  const info = document.getElementById("reviewInfo");
+  const btn = document.getElementById("reviewBtn");
+  const n = stats.wrong.length;
+  if(n===0){
+    info.textContent = "まだ要復習の問題はありません。通常演習で間違えると、ここに溜まります。";
+    btn.disabled = true; btn.textContent = "要復習の問題はありません";
+  } else {
+    info.textContent = "要復習: "+n+"問。間違えた問題だけを集中的に解き直せます。";
+    btn.disabled = false; btn.textContent = "間違えた問題を復習する（"+n+"問）";
+  }
+}
+
+/* ===== クイズ開始 ===== */
+function startQuiz(mode){
+  let list = [];
+  if(mode==="review"){
+    list = stats.wrong.map(byId).filter(Boolean);
+    if(list.length===0){ alert("復習する問題がありません。"); return; }
+    list = shuffle(list);
+  } else {
+    const dom = document.getElementById("selDomain").value;
+    const cnt = parseInt(document.getElementById("selCount").value,10);
+    const ord = document.getElementById("selOrder").value;
+    list = dom==="__all__" ? QUESTIONS.slice() : QUESTIONS.filter(q=>q.domain===dom);
+    list = ord==="random" ? shuffle(list) : list.slice();
+    if(cnt<list.length) list = list.slice(0,cnt);
+  }
+  quiz = { list, idx:0, score:0, mode, revealed:false, sel:[], wrongThis:[] };
+  document.getElementById("start").classList.add("hide");
+  document.getElementById("result").classList.add("hide");
+  document.getElementById("quiz").classList.remove("hide");
+  renderQuestion();
+  window.scrollTo(0,0);
+}
+
+function renderQuestion(){
+  const q = quiz.list[quiz.idx];
+  quiz.revealed = false; quiz.sel = [];
+  document.getElementById("qProgress").textContent = (quiz.idx+1)+" / "+quiz.list.length;
+  document.getElementById("qScore").textContent = "正解 "+quiz.score;
+  document.getElementById("qBar").style.width = Math.round(quiz.idx/quiz.list.length*100)+"%";
+  document.getElementById("qDomain").textContent = q.domain;
+  document.getElementById("qText").textContent = q.q;
+  const multi = q.type==="multi" || q.answer.length>1;
+  document.getElementById("qHint").textContent = multi ? "▶ "+q.answer.length+"つ選択してください" : "▶ 1つ選択してください";
+  const opts = document.getElementById("qOptions");
+  opts.innerHTML = "";
+  q.options.forEach((text,i)=>{
+    const div = document.createElement("div");
+    div.className = "opt" + (multi?"":" round");
+    div.dataset.i = i;
+    div.innerHTML = '<div class="box">'+ABC[i]+'</div><div>'+text+'</div>';
+    div.onclick = ()=>toggleOpt(i, multi, div);
+    opts.appendChild(div);
+  });
+  document.getElementById("qExplain").innerHTML = "";
+  const btn = document.getElementById("qAction");
+  btn.textContent = "解答する"; btn.disabled = true;
+}
+
+function toggleOpt(i, multi, div){
+  if(quiz.revealed) return;
+  if(multi){
+    const pos = quiz.sel.indexOf(i);
+    if(pos>=0){ quiz.sel.splice(pos,1); div.classList.remove("sel"); }
+    else { quiz.sel.push(i); div.classList.add("sel"); }
+  } else {
+    quiz.sel = [i];
+    document.querySelectorAll("#qOptions .opt").forEach(o=>o.classList.remove("sel"));
+    div.classList.add("sel");
+  }
+  document.getElementById("qAction").disabled = quiz.sel.length===0;
+}
+
+function onAction(){
+  if(!quiz.revealed){ revealAnswer(); }
+  else { nextQuestion(); }
+}
+
+function revealAnswer(){
+  const q = quiz.list[quiz.idx];
+  quiz.revealed = true;
+  const correct = arrEq(quiz.sel, q.answer);
+  document.querySelectorAll("#qOptions .opt").forEach(o=>{
+    const i = parseInt(o.dataset.i,10);
+    o.onclick = null; o.style.cursor = "default";
+    if(q.answer.includes(i)) o.classList.add("correct");
+    else if(quiz.sel.includes(i)) o.classList.add("wrong");
+    o.classList.remove("sel");
+  });
+  const ex = document.getElementById("qExplain");
+  ex.innerHTML = '<div class="explain '+(correct?"ok":"ng")+'"><b>'
+    + (correct?"⭕️ 正解":"❌ 不正解")+'</b><br>'+q.explanation+'</div>';
+
+  // 記録更新
+  if(correct) quiz.score++;
+  stats.total++; if(correct) stats.correct++;
+  const dd = stats.dom[q.domain] || {a:0,c:0};
+  dd.a++; if(correct) dd.c++; stats.dom[q.domain]=dd;
+  const wpos = stats.wrong.indexOf(q.id);
+  if(correct){ if(wpos>=0) stats.wrong.splice(wpos,1); }
+  else { if(wpos<0) stats.wrong.push(q.id); if(!quiz.wrongThis.includes(q.id)) quiz.wrongThis.push(q.id); }
+  saveStats(stats);
+
+  document.getElementById("qScore").textContent = "正解 "+quiz.score;
+  const btn = document.getElementById("qAction");
+  btn.textContent = (quiz.idx===quiz.list.length-1) ? "結果を見る" : "次の問題へ ▶";
+}
+
+function nextQuestion(){
+  if(quiz.idx < quiz.list.length-1){ quiz.idx++; renderQuestion(); window.scrollTo(0,0); }
+  else { finishQuiz(); }
+}
+
+function finishQuiz(){
+  const total = quiz.list.length;
+  const pct = total ? Math.round(quiz.score/total*100) : 0;
+  stats.hist.push(pct); if(stats.hist.length>20) stats.hist = stats.hist.slice(-20);
+  saveStats(stats);
+
+  document.getElementById("quiz").classList.add("hide");
+  document.getElementById("result").classList.remove("hide");
+  document.getElementById("rMode").textContent = (quiz.mode==="review"?"復習モード":"通常演習")+" の結果";
+  document.getElementById("rScore").textContent = quiz.score+" / "+total;
+  const pill = document.getElementById("rPct");
+  pill.textContent = "正答率 "+pct+"%";
+  pill.style.borderColor = pct>=70?"var(--ok)":(pct>=40?"var(--warn)":"var(--ng)");
+  let msg = pct>=90 ? "🎉 素晴らしい！合格圏内です。" : pct>=70 ? "👍 合格ライン到達。この調子！" : pct>=40 ? "📚 もう少し。復習で固めましょう。" : "🔥 まずは解説をじっくり読み直そう。";
+  document.getElementById("rMsg").textContent = msg;
+
+  const rc = document.getElementById("rReviewCard");
+  const rr = document.getElementById("rReview");
+  const rb = document.getElementById("rReviewBtn");
+  if(quiz.wrongThis.length){
+    rr.innerHTML = quiz.wrongThis.map(id=>{
+      const q = byId(id);
+      const ans = q.answer.map(i=>ABC[i]+". "+q.options[i]).join(" / ");
+      return '<div class="reviewItem"><b>'+q.q+'</b><br><span class="muted">正解: '+ans+'</span></div>';
+    }).join("");
+    rc.classList.remove("hide"); rb.classList.remove("hide");
+  } else {
+    rr.innerHTML = '<div class="muted">全問正解！🎯</div>';
+    rc.classList.remove("hide"); rb.classList.add("hide");
+  }
+  window.scrollTo(0,0);
+}
+
+function showStart(){
+  document.getElementById("quiz").classList.add("hide");
+  document.getElementById("result").classList.add("hide");
+  document.getElementById("start").classList.remove("hide");
+  stats = loadStats();
+  renderDash(); renderReviewInfo();
+  window.scrollTo(0,0);
+}
+
+function resetAll(){
+  if(!confirm("学習記録（解答数・正答率・要復習）をすべて消去します。よろしいですか？")) return;
+  localStorage.removeItem(LS_KEY);
+  stats = loadStats();
+  renderDash(); renderReviewInfo();
+}
+
+init();
+</script>
+</body>
+</html>
