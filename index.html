@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>学習アプリ</title>
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
+<meta name="application-name" content="学習アプリ">
+<style>
+:root{--bg:#0f1220;--card:#1a1f33;--card2:#222843;--text:#e8ebf5;--muted:#9aa3c4;--accent:#4f8cff;--accent2:#7c5cff;--line:#2b3252;--ok:#2ecc71}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(160deg,#0f1220,#141a30);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:24px;min-height:100vh}
+.wrap{max-width:760px;margin:0 auto}
+header{text-align:center;padding:28px 0 8px}
+header img{width:96px;height:96px;border-radius:22px;border:1px solid var(--line);background:#0b0e18}
+h1{font-size:1.6rem;margin:14px 0 4px}
+.sub{color:var(--muted);font-size:.95rem;margin-bottom:22px}
+.grid{display:grid;gap:14px}
+a.card{display:flex;align-items:center;gap:16px;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;transition:transform .12s,border-color .12s,background .12s}
+a.card:hover{transform:translateY(-2px);border-color:var(--accent);background:var(--card2)}
+.card .emoji{font-size:1.8rem;width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:#0b0e18;border-radius:12px;border:1px solid var(--line);flex:0 0 auto}
+.card .body{flex:1}
+.card .name{font-size:1.1rem;font-weight:600}
+.card .desc{color:var(--muted);font-size:.85rem}
+.card .arrow{color:var(--muted);font-size:1.4rem}
+.badge{display:inline-block;font-size:.7rem;padding:2px 8px;border-radius:999px;margin-left:8px;vertical-align:middle}
+.badge.ok{background:rgba(46,204,113,.15);color:#5fe39a;border:1px solid rgba(46,204,113,.4)}
+.badge.soon{background:rgba(154,163,196,.15);color:var(--muted);border:1px solid var(--line)}
+.card.disabled{opacity:.55;pointer-events:none}
+footer{text-align:center;color:var(--muted);font-size:.78rem;margin-top:28px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<img src="icon.png" alt="学習アプリ">
+<h1>学習アプリ</h1>
+<div class="sub">資格・検定の練習アプリ集</div>
+</header>
+<div class="grid">
+<a class="card" href="./ai900/">
+<div class="emoji">🤖</div>
+<div class="body">
+<div class="name">AI-900<span class="badge ok">公開中</span></div>
+<div class="desc">Microsoft Azure AI Fundamentals 練習問題</div>
+</div>
+<div class="arrow">›</div>
+</a>
+<a class="card" href="./toukei-2/">
+<div class="emoji">📊</div>
+<div class="body">
+<div class="name">統計検定<span class="badge ok">公開中</span></div>
+<div class="desc">統計検定の練習問題</div>
+</div>
+<div class="arrow">›</div>
+</a>
+<a class="card disabled" href="#">
+<div class="emoji">☁️</div>
+<div class="body">
+<div class="name">AZ-900<span class="badge soon">準備中</span></div>
+<div class="desc">Microsoft Azure Fundamentals 練習問題（近日公開）</div>
+</div>
+<div class="arrow">›</div>
+</a>
+</div>
+<footer>© PythonZero-Apex / study-apps</footer>
+</div>
+</body>
+</html>
