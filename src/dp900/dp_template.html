@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>DP-900 練習問題</title>
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="DP-900">
+<meta name="application-name" content="DP-900">
+<style>
+  :root{
+    --bg:#0c1a1c; --card:#13262a; --card2:#1a3238; --text:#e6f1f2; --muted:#92b3b8;
+    --accent:#14b8a6; --accent2:#2563eb; --ok:#2ecc71; --ng:#ff5c72; --warn:#ffb454; --line:#234349;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(160deg,#0b1719,#0e2226);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    line-height:1.7;padding:16px;min-height:100vh}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:1.4rem;margin:.2em 0}
+  .sub{color:var(--muted);font-size:.9rem;margin-bottom:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:20px;margin-bottom:16px;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+  .card h2{font-size:1rem;margin:0 0 12px}
+  label.field{display:block;color:var(--muted);font-size:.85rem;margin:10px 0 4px}
+  select,button{font:inherit}
+  select{background:var(--card2);color:var(--text);border:1px solid var(--line);
+    border-radius:10px;padding:11px 12px;width:100%}
+  .btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;
+    border-radius:12px;padding:14px 20px;font-weight:700;cursor:pointer;transition:.15s;width:100%}
+  .btn:hover{filter:brightness(1.08)} .btn:active{transform:translateY(1px)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .btn.secondary{background:var(--card2);border:1px solid var(--line)}
+  .btn.review{background:linear-gradient(135deg,#ff8a3d,#ff5c72)}
+  .meta{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:var(--muted);margin-bottom:8px}
+  .bar{height:7px;background:var(--card2);border-radius:99px;overflow:hidden;margin-bottom:18px}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:.3s}
+  .tag{display:inline-block;font-size:.72rem;background:var(--card2);border:1px solid var(--line);
+    color:var(--muted);padding:3px 9px;border-radius:99px;margin-bottom:10px}
+  .qtext{font-size:1.08rem;font-weight:600;margin:6px 0 16px}
+  .opt{display:flex;gap:11px;align-items:flex-start;background:var(--card2);border:1px solid var(--line);
+    border-radius:12px;padding:13px 15px;margin-bottom:10px;cursor:pointer;transition:.12s}
+  .opt:hover{border-color:var(--accent)}
+  .opt.sel{border-color:var(--accent);background:#1d3f44}
+  .opt.correct{border-color:var(--ok);background:rgba(46,204,113,.14)}
+  .opt.wrong{border-color:var(--ng);background:rgba(255,92,114,.14)}
+  .opt .box{width:22px;height:22px;border-radius:6px;border:2px solid var(--muted);flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;font-size:.8rem;margin-top:2px}
+  .opt.round .box{border-radius:50%}
+  .hint{font-size:.78rem;color:var(--muted);margin:-2px 0 12px}
+  .explain{background:var(--card2);border-radius:12px;padding:14px 16px;margin-top:6px;font-size:.95rem;border:1px solid var(--line)}
+  .explain.ok{background:rgba(46,204,113,.10);border-color:rgba(46,204,113,.4)}
+  .explain.ng{background:rgba(255,92,114,.10);border-color:rgba(255,92,114,.4)}
+  .explain b{color:var(--text)}
+  .center{text-align:center}
+  .big{font-size:2.6rem;font-weight:800;margin:6px 0}
+  .muted{color:var(--muted)}
+  .pill{display:inline-block;font-size:.8rem;padding:4px 10px;border-radius:99px;background:var(--card2);border:1px solid var(--line)}
+  .reviewItem{border-left:3px solid var(--ng);padding:6px 0 6px 12px;margin:8px 0;font-size:.9rem}
+  .hide{display:none}
+  .footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:10px}
+  .stats{display:flex;gap:10px;margin-bottom:8px}
+  .stat{flex:1;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+  .stat .n{font-size:1.5rem;font-weight:800} .stat .l{font-size:.72rem;color:var(--muted)}
+  .domgroup{font-size:.8rem;font-weight:700;color:var(--text);margin:12px 0 4px}
+  .domrow{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:.82rem}
+  .domrow .nm{width:200px;flex:0 0 auto;color:var(--muted)}
+  .domrow .track{flex:1;height:9px;background:var(--card2);border-radius:99px;overflow:hidden}
+  .domrow .fill{height:100%;border-radius:99px}
+  .domrow .pc{width:42px;text-align:right;flex:0 0 auto}
+  .trend{font-size:.85rem;color:var(--muted);margin-top:4px}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- START -->
+  <div id="start">
+    <h1>DP-900 練習問題 🗄️</h1>
+    <div class="sub">Azure Data Fundamentals ／ 全<span id="qtotal">0</span>問・本番形式・解説付き</div>
+
+    <div class="card" id="dashCard">
+      <h2>📊 学習ダッシュボード</h2>
+      <div id="dashBody"></div>
+    </div>
+
+    <div class="card" id="reviewCard">
+      <h2>🔁 復習モード</h2>
+      <div id="reviewInfo" class="muted" style="margin-bottom:12px"></div>
+      <button class="btn review" id="reviewBtn" onclick="startQuiz('review')">間違えた問題を復習する</button>
+    </div>
+
+    <div class="card">
+      <h2>📝 通常演習</h2>
+      <label class="field">出題分野（公式カテゴリ）</label>
+      <select id="selDomain"></select>
+      <label class="field">出題数</label>
+      <select id="selCount">
+        <option value="10">10問（本番ミニ）</option>
+        <option value="5">5問（さくっと）</option>
+        <option value="20">20問</option>
+        <option value="40">40問（本番想定）</option>
+        <option value="999">全問</option>
+      </select>
+      <label class="field">出題順</label>
+      <select id="selOrder">
+        <option value="random">ランダム</option>
+        <option value="seq">順番通り</option>
+      </select>
+      <div style="height:14px"></div>
+      <button class="btn" onclick="startQuiz('normal')">スタート ▶</button>
+    </div>
+    <div class="footer">合格目安: 正答率70%（本番は700/1000）</div>
+    <div class="footer"><a href="../" style="color:var(--muted)">← 学習アプリTOPへ</a></div>
+    <div class="footer"><a href="#" onclick="resetAll();return false;" style="color:var(--muted)">学習記録をリセット</a></div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz" class="hide">
+    <div class="meta">
+      <span id="qProgress">1 / 10</span>
+      <span id="qScore">正解 0</span>
+    </div>
+    <div class="bar"><i id="qBar"></i></div>
+    <div class="card">
+      <span class="tag" id="qDomain"></span>
+      <div class="qtext" id="qText"></div>
+      <div class="hint" id="qHint"></div>
+      <div id="qOptions"></div>
+      <div id="qExplain"></div>
+      <div style="height:8px"></div>
+      <button class="btn" id="qAction" onclick="onAction()">解答する</button>
+    </div>
+    <button class="btn secondary" onclick="showStart()">中断してトップへ</button>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result" class="hide">
+    <div class="card center">
+      <div class="muted" id="rMode">結果</div>
+      <div class="big" id="rScore">0 / 0</div>
+      <div id="rPct" class="pill"></div>
+      <div id="rMsg" style="margin-top:14px;font-weight:600"></div>
+    </div>
+    <div class="card" id="rReviewCard">
+      <h2>復習（間違えた問題）</h2>
+      <div id="rReview"></div>
+    </div>
+    <button class="btn review" id="rReviewBtn" onclick="startQuiz('review')" style="margin-bottom:10px">間違いをすぐ復習 🔁</button>
+    <button class="btn secondary" onclick="showStart()">トップへ戻る</button>
+  </div>
+
+  <div class="footer">study-apps ／ DP-900</div>
+</div>
+
+<script>
+/* ===== 問題データ ===== */
+const QUESTIONS = __QUESTIONS__;
+
+/* ===== 公式カテゴリ構造（DP-900 スキル測定の機能グループに準拠） ===== */
+const CATEGORY_TREE = [
+  {area:"コアデータの概念", subs:["データの表現方法","データストレージの選択肢","一般的なデータワークロード","役割と責任"]},
+  {area:"リレーショナルデータ", subs:["リレーショナルの概念","リレーショナル系Azureサービス"]},
+  {area:"非リレーショナルデータ", subs:["Azureストレージ","Azure Cosmos DB"]},
+  {area:"分析ワークロード", subs:["大規模分析の要素","リアルタイム分析","Power BIによる可視化"]}
+];
+const SUB_ORDER = CATEGORY_TREE.flatMap(c=>c.subs);
+const SUB_PARENT = {};
+CATEGORY_TREE.forEach(c=>c.subs.forEach(s=>SUB_PARENT[s]=c.area));
+
+const LS_KEY = "dp900_v1";
+const ABC = ["A","B","C","D","E","F"];
+
+/* ===== 学習記録（localStorage） ===== */
+function loadStats(){
+  let s; try{ s = JSON.parse(localStorage.getItem(LS_KEY)); }catch(e){ s=null; }
+  if(!s) s = {};
+  s.total = s.total||0; s.correct = s.correct||0;
+  s.dom = s.dom||{}; s.wrong = s.wrong||[]; s.hist = s.hist||[];
+  return s;
+}
+function saveStats(s){ try{ localStorage.setItem(LS_KEY, JSON.stringify(s)); }catch(e){} }
+let stats = loadStats();
+
+/* ===== 状態 ===== */
+let quiz = { list:[], idx:0, score:0, mode:"normal", revealed:false, sel:[], wrongThis:[], optOrder:[] };
+
+/* ===== ユーティリティ ===== */
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function byId(id){ return QUESTIONS.find(q=>q.id===id); }
+function arrEq(a,b){ if(a.length!==b.length) return false; const x=[...a].sort((m,n)=>m-n),y=[...b].sort((m,n)=>m-n); return x.every((v,i)=>v===y[i]); }
+
+/* ===== 初期化 ===== */
+function init(){
+  document.getElementById("qtotal").textContent = QUESTIONS.length;
+  const sel = document.getElementById("selDomain");
+  sel.innerHTML = "";
+  const optAll = document.createElement("option");
+  optAll.value = "__all__"; optAll.textContent = "すべて（全"+QUESTIONS.length+"問）";
+  sel.appendChild(optAll);
+  CATEGORY_TREE.forEach(c=>{
+    const og = document.createElement("optgroup");
+    og.label = c.area;
+    c.subs.forEach(s=>{
+      const n = QUESTIONS.filter(q=>q.sub===s).length;
+      const o = document.createElement("option");
+      o.value = s; o.textContent = s+"（"+n+"問）";
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  });
+  renderDash();
+  renderReviewInfo();
+}
+
+function renderDash(){
+  const el = document.getElementById("dashBody");
+  const acc = stats.total ? Math.round(stats.correct/stats.total*100) : 0;
+  if(stats.total===0){
+    el.innerHTML = '<div class="muted">まだ記録がありません。まずは10問やってみましょう。</div>';
+    return;
+  }
+  let h = '<div class="stats">'
+    + '<div class="stat"><div class="n">'+stats.total+'</div><div class="l">解答数</div></div>'
+    + '<div class="stat"><div class="n">'+acc+'%</div><div class="l">正答率</div></div>'
+    + '<div class="stat"><div class="n">'+stats.wrong.length+'</div><div class="l">要復習</div></div>'
+    + '</div>';
+  CATEGORY_TREE.forEach(c=>{
+    h += '<div class="domgroup">'+c.area+'</div>';
+    c.subs.forEach(s=>{
+      const dd = stats.dom[s]||{a:0,c:0};
+      const p = dd.a ? Math.round(dd.c/dd.a*100) : 0;
+      const col = !dd.a ? "var(--line)" : (p>=70?"var(--ok)":(p>=40?"var(--warn)":"var(--ng)"));
+      h += '<div class="domrow"><div class="nm">'+s+'</div>'
+        + '<div class="track"><div class="fill" style="width:'+p+'%;background:'+col+'"></div></div>'
+        + '<div class="pc">'+(dd.a?p+'%':'—')+'</div></div>';
+    });
+  });
+  if(stats.hist.length){
+    const last = stats.hist.slice(-5).map(x=>x+'%').join(" → ");
+    h += '<div class="trend">直近の成績: '+last+'</div>';
+  }
+  el.innerHTML = h;
+}
+
+function renderReviewInfo(){
+  const info = document.getElementById("reviewInfo");
+  const btn = document.getElementById("reviewBtn");
+  const n = stats.wrong.length;
+  if(n===0){
+    info.textContent = "まだ要復習の問題はありません。通常演習で間違えると、ここに溜まります。";
+    btn.disabled = true; btn.textContent = "要復習の問題はありません";
+  } else {
+    info.textContent = "要復習: "+n+"問。間違えた問題だけを集中的に解き直せます。";
+    btn.disabled = false; btn.textContent = "間違えた問題を復習する（"+n+"問）";
+  }
+}
+
+/* ===== クイズ開始 ===== */
+function startQuiz(mode){
+  let list = [];
+  if(mode==="review"){
+    list = stats.wrong.map(byId).filter(Boolean);
+    if(list.length===0){ alert("復習する問題がありません。"); return; }
+    list = shuffle(list);
+  } else {
+    const dom = document.getElementById("selDomain").value;
+    const cnt = parseInt(document.getElementById("selCount").value,10);
+    const ord = document.getElementById("selOrder").value;
+    list = dom==="__all__" ? QUESTIONS.slice() : QUESTIONS.filter(q=>q.sub===dom);
+    list = ord==="random" ? shuffle(list) : list.slice();
+    if(cnt<list.length) list = list.slice(0,cnt);
+  }
+  quiz = { list, idx:0, score:0, mode, revealed:false, sel:[], wrongThis:[], optOrder:[] };
+  document.getElementById("start").classList.add("hide");
+  document.getElementById("result").classList.add("hide");
+  document.getElementById("quiz").classList.remove("hide");
+  renderQuestion();
+  window.scrollTo(0,0);
+}
+
+function renderQuestion(){
+  const q = quiz.list[quiz.idx];
+  quiz.revealed = false; quiz.sel = [];
+  quiz.optOrder = shuffle(q.options.map((_,i)=>i));
+  document.getElementById("qProgress").textContent = (quiz.idx+1)+" / "+quiz.list.length;
+  document.getElementById("qScore").textContent = "正解 "+quiz.score;
+  document.getElementById("qBar").style.width = Math.round(quiz.idx/quiz.list.length*100)+"%";
+  document.getElementById("qDomain").textContent = (SUB_PARENT[q.sub]||"")+" ／ "+q.sub;
+  document.getElementById("qText").textContent = q.q;
+  const multi = q.type==="multi" || q.answer.length>1;
+  document.getElementById("qHint").textContent = multi ? "▶ "+q.answer.length+"つ選択してください" : "▶ 1つ選択してください";
+  const opts = document.getElementById("qOptions");
+  opts.innerHTML = "";
+  quiz.optOrder.forEach((origIdx,displayPos)=>{
+    const div = document.createElement("div");
+    div.className = "opt" + (multi?"":" round");
+    div.dataset.orig = origIdx;
+    div.innerHTML = '<div class="box">'+ABC[displayPos]+'</div><div>'+q.options[origIdx]+'</div>';
+    div.onclick = ()=>toggleOpt(origIdx, multi, div);
+    opts.appendChild(div);
+  });
+  document.getElementById("qExplain").innerHTML = "";
+  const btn = document.getElementById("qAction");
+  btn.textContent = "解答する"; btn.disabled = true;
+}
+
+function toggleOpt(origIdx, multi, div){
+  if(quiz.revealed) return;
+  if(multi){
+    const pos = quiz.sel.indexOf(origIdx);
+    if(pos>=0){ quiz.sel.splice(pos,1); div.classList.remove("sel"); }
+    else { quiz.sel.push(origIdx); div.classList.add("sel"); }
+  } else {
+    quiz.sel = [origIdx];
+    document.querySelectorAll("#qOptions .opt").forEach(o=>o.classList.remove("sel"));
+    div.classList.add("sel");
+  }
+  document.getElementById("qAction").disabled = quiz.sel.length===0;
+}
+
+function onAction(){
+  if(!quiz.revealed){ revealAnswer(); }
+  else { nextQuestion(); }
+}
+
+function revealAnswer(){
+  const q = quiz.list[quiz.idx];
+  quiz.revealed = true;
+  const correct = arrEq(quiz.sel, q.answer);
+  document.querySelectorAll("#qOptions .opt").forEach(o=>{
+    const i = parseInt(o.dataset.orig,10);
+    o.onclick = null; o.style.cursor = "default";
+    if(q.answer.includes(i)) o.classList.add("correct");
+    else if(quiz.sel.includes(i)) o.classList.add("wrong");
+    o.classList.remove("sel");
+  });
+  const ex = document.getElementById("qExplain");
+  ex.innerHTML = '<div class="explain '+(correct?"ok":"ng")+'"><b>'
+    + (correct?"⭕️ 正解":"❌ 不正解")+'</b><br>'+q.explanation+'</div>';
+
+  if(correct) quiz.score++;
+  stats.total++; if(correct) stats.correct++;
+  const dd = stats.dom[q.sub] || {a:0,c:0};
+  dd.a++; if(correct) dd.c++; stats.dom[q.sub]=dd;
+  const wpos = stats.wrong.indexOf(q.id);
+  if(correct){ if(wpos>=0) stats.wrong.splice(wpos,1); }
+  else { if(wpos<0) stats.wrong.push(q.id); if(!quiz.wrongThis.includes(q.id)) quiz.wrongThis.push(q.id); }
+  saveStats(stats);
+
+  document.getElementById("qScore").textContent = "正解 "+quiz.score;
+  const btn = document.getElementById("qAction");
+  btn.textContent = (quiz.idx===quiz.list.length-1) ? "結果を見る" : "次の問題へ ▶";
+}
+
+function nextQuestion(){
+  if(quiz.idx < quiz.list.length-1){ quiz.idx++; renderQuestion(); window.scrollTo(0,0); }
+  else { finishQuiz(); }
+}
+
+function finishQuiz(){
+  const total = quiz.list.length;
+  const pct = total ? Math.round(quiz.score/total*100) : 0;
+  stats.hist.push(pct); if(stats.hist.length>20) stats.hist = stats.hist.slice(-20);
+  saveStats(stats);
+
+  document.getElementById("quiz").classList.add("hide");
+  document.getElementById("result").classList.remove("hide");
+  document.getElementById("rMode").textContent = (quiz.mode==="review"?"復習モード":"通常演習")+" の結果";
+  document.getElementById("rScore").textContent = quiz.score+" / "+total;
+  const pill = document.getElementById("rPct");
+  pill.textContent = "正答率 "+pct+"%";
+  pill.style.borderColor = pct>=70?"var(--ok)":(pct>=40?"var(--warn)":"var(--ng)");
+  let msg = pct>=90 ? "🎉 素晴らしい！合格圏内です。" : pct>=70 ? "👍 合格ライン到達。この調子！" : pct>=40 ? "📚 もう少し。復習で固めましょう。" : "🔥 まずは解説をじっくり読み直そう。";
+  document.getElementById("rMsg").textContent = msg;
+
+  const rc = document.getElementById("rReviewCard");
+  const rr = document.getElementById("rReview");
+  const rb = document.getElementById("rReviewBtn");
+  if(quiz.wrongThis.length){
+    rr.innerHTML = quiz.wrongThis.map(id=>{
+      const q = byId(id);
+      const ans = q.answer.map(i=>q.options[i]).join(" / ");
+      return '<div class="reviewItem"><b>'+q.q+'</b><br><span class="muted">正解: '+ans+'</span></div>';
+    }).join("");
+    rc.classList.remove("hide"); rb.classList.remove("hide");
+  } else {
+    rr.innerHTML = '<div class="muted">全問正解！🎯</div>';
+    rc.classList.remove("hide"); rb.classList.add("hide");
+  }
+  window.scrollTo(0,0);
+}
+
+function showStart(){
+  document.getElementById("quiz").classList.add("hide");
+  document.getElementById("result").classList.add("hide");
+  document.getElementById("start").classList.remove("hide");
+  stats = loadStats();
+  renderDash(); renderReviewInfo();
+  window.scrollTo(0,0);
+}
+
+function resetAll(){
+  if(!confirm("学習記録（解答数・正答率・要復習）をすべて消去します。よろしいですか？")) return;
+  localStorage.removeItem(LS_KEY);
+  stats = loadStats();
+  renderDash(); renderReviewInfo();
+}
+
+init();
+</script>
+</body>
+</html>
