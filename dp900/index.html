@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>DP-900 練習問題</title>
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="DP-900">
+<meta name="application-name" content="DP-900">
+<style>
+  :root{
+    --bg:#0c1a1c; --card:#13262a; --card2:#1a3238; --text:#e6f1f2; --muted:#92b3b8;
+    --accent:#14b8a6; --accent2:#2563eb; --ok:#2ecc71; --ng:#ff5c72; --warn:#ffb454; --line:#234349;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(160deg,#0b1719,#0e2226);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    line-height:1.7;padding:16px;min-height:100vh}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:1.4rem;margin:.2em 0}
+  .sub{color:var(--muted);font-size:.9rem;margin-bottom:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:20px;margin-bottom:16px;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+  .card h2{font-size:1rem;margin:0 0 12px}
+  label.field{display:block;color:var(--muted);font-size:.85rem;margin:10px 0 4px}
+  select,button{font:inherit}
+  select{background:var(--card2);color:var(--text);border:1px solid var(--line);
+    border-radius:10px;padding:11px 12px;width:100%}
+  .btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;
+    border-radius:12px;padding:14px 20px;font-weight:700;cursor:pointer;transition:.15s;width:100%}
+  .btn:hover{filter:brightness(1.08)} .btn:active{transform:translateY(1px)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .btn.secondary{background:var(--card2);border:1px solid var(--line)}
+  .btn.review{background:linear-gradient(135deg,#ff8a3d,#ff5c72)}
+  .meta{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:var(--muted);margin-bottom:8px}
+  .bar{height:7px;background:var(--card2);border-radius:99px;overflow:hidden;margin-bottom:18px}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:.3s}
+  .tag{display:inline-block;font-size:.72rem;background:var(--card2);border:1px solid var(--line);
+    color:var(--muted);padding:3px 9px;border-radius:99px;margin-bottom:10px}
+  .qtext{font-size:1.08rem;font-weight:600;margin:6px 0 16px}
+  .opt{display:flex;gap:11px;align-items:flex-start;background:var(--card2);border:1px solid var(--line);
+    border-radius:12px;padding:13px 15px;margin-bottom:10px;cursor:pointer;transition:.12s}
+  .opt:hover{border-color:var(--accent)}
+  .opt.sel{border-color:var(--accent);background:#1d3f44}
+  .opt.correct{border-color:var(--ok);background:rgba(46,204,113,.14)}
+  .opt.wrong{border-color:var(--ng);background:rgba(255,92,114,.14)}
+  .opt .box{width:22px;height:22px;border-radius:6px;border:2px solid var(--muted);flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;font-size:.8rem;margin-top:2px}
+  .opt.round .box{border-radius:50%}
+  .hint{font-size:.78rem;color:var(--muted);margin:-2px 0 12px}
+  .explain{background:var(--card2);border-radius:12px;padding:14px 16px;margin-top:6px;font-size:.95rem;border:1px solid var(--line)}
+  .explain.ok{background:rgba(46,204,113,.10);border-color:rgba(46,204,113,.4)}
+  .explain.ng{background:rgba(255,92,114,.10);border-color:rgba(255,92,114,.4)}
+  .explain b{color:var(--text)}
+  .center{text-align:center}
+  .big{font-size:2.6rem;font-weight:800;margin:6px 0}
+  .muted{color:var(--muted)}
+  .pill{display:inline-block;font-size:.8rem;padding:4px 10px;border-radius:99px;background:var(--card2);border:1px solid var(--line)}
+  .reviewItem{border-left:3px solid var(--ng);padding:6px 0 6px 12px;margin:8px 0;font-size:.9rem}
+  .hide{display:none}
+  .footer{color:var(--muted);font-size:.78rem;text-align:center;margin-top:10px}
+  .stats{display:flex;gap:10px;margin-bottom:8px}
+  .stat{flex:1;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+  .stat .n{font-size:1.5rem;font-weight:800} .stat .l{font-size:.72rem;color:var(--muted)}
+  .domgroup{font-size:.8rem;font-weight:700;color:var(--text);margin:12px 0 4px}
+  .domrow{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:.82rem}
+  .domrow .nm{width:200px;flex:0 0 auto;color:var(--muted)}
+  .domrow .track{flex:1;height:9px;background:var(--card2);border-radius:99px;overflow:hidden}
+  .domrow .fill{height:100%;border-radius:99px}
+  .domrow .pc{width:42px;text-align:right;flex:0 0 auto}
+  .trend{font-size:.85rem;color:var(--muted);margin-top:4px}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- START -->
+  <div id="start">
+    <h1>DP-900 練習問題 🗄️</h1>
+    <div class="sub">Azure Data Fundamentals ／ 全<span id="qtotal">0</span>問・本番形式・解説付き</div>
+
+    <div class="card" id="dashCard">
+      <h2>📊 学習ダッシュボード</h2>
+      <div id="dashBody"></div>
+    </div>
+
+    <div class="card" id="reviewCard">
+      <h2>🔁 復習モード</h2>
+      <div id="reviewInfo" class="muted" style="margin-bottom:12px"></div>
+      <button class="btn review" id="reviewBtn" onclick="startQuiz('review')">間違えた問題を復習する</button>
+    </div>
+
+    <div class="card">
+      <h2>📝 通常演習</h2>
+      <label class="field">出題分野（公式カテゴリ）</label>
+      <select id="selDomain"></select>
+      <label class="field">出題数</label>
+      <select id="selCount">
+        <option value="10">10問（本番ミニ）</option>
+        <option value="5">5問（さくっと）</option>
+        <option value="20">20問</option>
+        <option value="40">40問（本番想定）</option>
+        <option value="999">全問</option>
+      </select>
+      <label class="field">出題順</label>
+      <select id="selOrder">
+        <option value="random">ランダム</option>
+        <option value="seq">順番通り</option>
+      </select>
+      <div style="height:14px"></div>
+      <button class="btn" onclick="startQuiz('normal')">スタート ▶</button>
+    </div>
+    <div class="footer">合格目安: 正答率70%（本番は700/1000）</div>
+    <div class="footer"><a href="../" style="color:var(--muted)">← 学習アプリTOPへ</a></div>
+    <div class="footer"><a href="#" onclick="resetAll();return false;" style="color:var(--muted)">学習記録をリセット</a></div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz" class="hide">
+    <div class="meta">
+      <span id="qProgress">1 / 10</span>
+      <span id="qScore">正解 0</span>
+    </div>
+    <div class="bar"><i id="qBar"></i></div>
+    <div class="card">
+      <span class="tag" id="qDomain"></span>
+      <div class="qtext" id="qText"></div>
+      <div class="hint" id="qHint"></div>
+      <div id="qOptions"></div>
+      <div id="qExplain"></div>
+      <div style="height:8px"></div>
+      <button class="btn" id="qAction" onclick="onAction()">解答する</button>
+    </div>
+    <button class="btn secondary" onclick="showStart()">中断してトップへ</button>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result" class="hide">
+    <div class="card center">
+      <div class="muted" id="rMode">結果</div>
+      <div class="big" id="rScore">0 / 0</div>
+      <div id="rPct" class="pill"></div>
+      <div id="rMsg" style="margin-top:14px;font-weight:600"></div>
+    </div>
+    <div class="card" id="rReviewCard">
+      <h2>復習（間違えた問題）</h2>
+      <div id="rReview"></div>
+    </div>
+    <button class="btn review" id="rReviewBtn" onclick="startQuiz('review')" style="margin-bottom:10px">間違いをすぐ復習 🔁</button>
+    <button class="btn secondary" onclick="showStart()">トップへ戻る</button>
+  </div>
+
+  <div class="footer">study-apps ／ DP-900</div>
+</div>
+
+<script>
+/* ===== 問題データ ===== */
+const QUESTIONS = [{"area": "コアデータの概念", "sub": "データの表現方法", "type": "single", "q": "行と列を持つテーブルのように、厳密なスキーマに従って整理されたデータを何と呼びますか？", "options": ["構造化データ", "半構造化データ", "非構造化データ", "バイナリデータ"], "explanation": "構造化データは、あらかじめ定義されたスキーマ（テーブルの行・列）に従って整理されたデータで、リレーショナルデータベースが代表例です。", "id": 1, "answer": [0]}, {"area": "コアデータの概念", "sub": "データの表現方法", "type": "single", "q": "JSONやXMLのように、タグやキーで構造を持つが固定スキーマに縛られないデータを何と呼びますか？", "options": ["半構造化データ", "構造化データ", "非構造化データ", "リレーショナルデータ"], "explanation": "半構造化データはJSONやXMLのように、要素ごとに構造（キーやタグ）を持ちますが、厳密な固定スキーマには従いません。柔軟な形でデータを表現できます。", "id": 2, "answer": [0]}, {"area": "コアデータの概念", "sub": "データの表現方法", "type": "single", "q": "画像・動画・音声・PDFなど、定義済みの構造を持たないデータを何と呼びますか？", "options": ["非構造化データ", "構造化データ", "半構造化データ", "表形式データ"], "explanation": "非構造化データは画像・動画・音声・ドキュメントなど、テーブルやスキーマで表せない形式のデータです。オブジェクトストレージ（Blob）などに格納されます。", "id": 3, "answer": [0]}, {"area": "コアデータの概念", "sub": "データの表現方法", "type": "single", "q": "次のうち構造化データの典型例はどれですか？", "options": ["リレーショナルデータベースの顧客テーブル", "監視カメラの映像", "録音された音声ファイル", "スキャンしたPDF"], "explanation": "行と列で表される顧客テーブルは構造化データの典型です。映像・音声・PDFは非構造化データに分類されます。", "id": 4, "answer": [0]}, {"area": "コアデータの概念", "sub": "データの表現方法", "type": "single", "q": "次のうち半構造化データの例として最も適切なものはどれですか？", "options": ["キーと値で表されたJSONドキュメント", "行と列のSQLテーブル", "MP4の動画", "JPEG画像"], "explanation": "JSONドキュメントはキー/値で構造を持ちつつ柔軟にネストでき、半構造化データの代表例です。ドキュメントデータベースで扱われます。", "id": 5, "answer": [0]}, {"area": "コアデータの概念", "sub": "データの表現方法", "type": "single", "q": "非構造化データの保存に最も適したAzureサービスはどれですか？", "options": ["Azure Blob Storage", "Azure SQL Database", "リレーショナルのインデックス", "正規化テーブル"], "explanation": "画像・動画などの非構造化データは、オブジェクトストレージであるAzure Blob Storageに格納するのが適しています。", "id": 6, "answer": [0]}, {"area": "コアデータの概念", "sub": "データの表現方法", "type": "single", "q": "構造化データの特徴として最も適切なものはどれですか？", "options": ["事前に定義したスキーマに従い、行と列で表現される", "スキーマを一切持たない", "必ず画像形式である", "検索や集計ができない"], "explanation": "構造化データはスキーマ（列の型や制約）が事前に定義され、SQLで効率的に検索・集計できます。", "id": 7, "answer": [0]}, {"area": "コアデータの概念", "sub": "データの表現方法", "type": "single", "q": "半構造化データを表現するためによく使われる形式はどれですか？", "options": ["JSON・XML・YAML", "JPEG・PNG", "MP3・WAV", "EXE・DLL"], "explanation": "JSON・XML・YAMLは、タグやキーで構造を表現しつつ柔軟にネストできる半構造化データの代表的な形式です。", "id": 8, "answer": [0]}, {"area": "コアデータの概念", "sub": "データの表現方法", "type": "single", "q": "ソーシャルメディアの投稿に含まれるテキスト本文や添付画像は、主にどのデータ種別ですか？", "options": ["非構造化データ", "構造化データ", "正規化データ", "リレーショナルデータ"], "explanation": "自由記述のテキストや画像は決まったスキーマを持たないため、非構造化データに分類されます。", "id": 9, "answer": [0]}, {"area": "コアデータの概念", "sub": "データの表現方法", "type": "single", "q": "グラフ（点と線で関係を表す）データは、データの表現として主にどれに分類されますか？", "options": ["半構造化データ（関係性を持つ非リレーショナル）", "完全な構造化（固定スキーマ）", "画像データ", "音声データ"], "explanation": "ノードとエッジで関係を表すグラフデータは、固定スキーマに縛られない半構造化（非リレーショナル）データとして扱われます。", "id": 10, "answer": [0]}, {"area": "コアデータの概念", "sub": "データストレージの選択肢", "type": "single", "q": "カンマ区切りで表形式データを保存する、最も一般的なテキストファイル形式はどれですか？", "options": ["CSV", "MP4", "JPEG", "DOCX"], "explanation": "CSV（Comma-Separated Values）は、値をカンマで区切って表形式データを保存するテキスト形式で、広く使われます。", "id": 11, "answer": [0]}, {"area": "コアデータの概念", "sub": "データストレージの選択肢", "type": "single", "q": "列指向で圧縮効率が高く、大規模分析に適したファイル形式はどれですか？", "options": ["Parquet", "CSV", "TXT", "BMP"], "explanation": "Parquetは列指向（カラムナ）フォーマットで、高い圧縮率と分析クエリ性能を持ち、ビッグデータ／分析基盤で広く使われます。", "id": 12, "answer": [0]}, {"area": "コアデータの概念", "sub": "データストレージの選択肢", "type": "single", "q": "キーと値のペアで半構造化データを表す、Web APIでよく使われるテキスト形式はどれですか？", "options": ["JSON", "Parquet", "Avro", "CSV"], "explanation": "JSONはキー/値で半構造化データを表現するテキスト形式で、Web APIやドキュメントDBで広く使われます。", "id": 13, "answer": [0]}, {"area": "コアデータの概念", "sub": "データストレージの選択肢", "type": "single", "q": "リレーショナルデータベースの説明として最も適切なものはどれですか？", "options": ["テーブル間をキーで関連付けて構造化データを管理する", "スキーマを持たないオブジェクトのみを扱う", "画像専用の保存領域である", "ストリーミング専用である"], "explanation": "リレーショナルデータベースは、テーブル（行と列）を主キー・外部キーで関連付け、構造化データを一貫性をもって管理します。", "id": 14, "answer": [0]}, {"area": "コアデータの概念", "sub": "データストレージの選択肢", "type": "single", "q": "ドキュメントデータベース（例: Cosmos DB のドキュメントストア）が主に扱うデータはどれですか？", "options": ["JSONなどの半構造化ドキュメント", "固定スキーマの行と列のみ", "動画ファイルのみ", "SQLのインデックスのみ"], "explanation": "ドキュメントデータベースはJSONのような半構造化ドキュメントを格納し、柔軟なスキーマで高速に読み書きできます。", "id": 15, "answer": [0]}, {"area": "コアデータの概念", "sub": "データストレージの選択肢", "type": "single", "q": "非リレーショナル（NoSQL）データベースの種類に含まれないものはどれですか？", "options": ["正規化された結合専用エンジン", "キー値ストア", "ドキュメントストア", "グラフデータベース"], "explanation": "NoSQLにはキー値・ドキュメント・列ファミリー・グラフなどがあります。『正規化された結合専用エンジン』はNoSQLの分類ではありません。", "id": 16, "answer": [0]}, {"area": "コアデータの概念", "sub": "データストレージの選択肢", "type": "single", "q": "高速な読み書きが必要なキャッシュ用途に向く、単純な構造のデータベース種別はどれですか？", "options": ["キー値（キーバリュー）ストア", "リレーショナルDB", "データウェアハウス", "グラフDB"], "explanation": "キー値ストアはキーに対して値を高速に取得でき、セッション管理やキャッシュ（例: Azure Cache for Redis）に適します。", "id": 17, "answer": [0]}, {"area": "コアデータの概念", "sub": "データストレージの選択肢", "type": "single", "q": "人やモノの『関係性（つながり）』を表現・探索するのに最も適したデータベース種別はどれですか？", "options": ["グラフデータベース", "リレーショナルDB", "キー値ストア", "列指向ファイル"], "explanation": "グラフデータベースはノード（実体）とエッジ（関係）でデータを表し、ソーシャルネットワークや推薦などの関係探索に適します。", "id": 18, "answer": [0]}, {"area": "コアデータの概念", "sub": "一般的なデータワークロード", "type": "single", "q": "注文処理や在庫更新など、多数の短いトランザクションを高速に処理するワークロードを何と呼びますか？", "options": ["トランザクション処理（OLTP）", "分析処理（OLAP）", "バッチ可視化", "データ可視化"], "explanation": "OLTP（Online Transaction Processing）は、注文・在庫更新などの短い読み書きを大量・高速に処理するワークロードです。", "id": 19, "answer": [0]}, {"area": "コアデータの概念", "sub": "一般的なデータワークロード", "type": "single", "q": "大量データを集計し、傾向分析やレポート作成を行うワークロードを何と呼びますか？", "options": ["分析処理（OLAP）", "トランザクション処理（OLTP）", "キャッシュ処理", "ストリーム取り込み"], "explanation": "OLAP（Online Analytical Processing）は、大量の履歴データを集計・分析してレポートや意思決定に活用するワークロードです。", "id": 20, "answer": [0]}, {"area": "コアデータの概念", "sub": "一般的なデータワークロード", "type": "single", "q": "トランザクションの信頼性を保証する『ACID』が表す特性に含まれないものはどれですか？", "options": ["可用性（Availability）", "原子性（Atomicity）", "一貫性（Consistency）", "分離性（Isolation）"], "explanation": "ACIDは原子性・一貫性・分離性・永続性（Durability）です。可用性（Availability）はACIDの要素ではありません。", "id": 21, "answer": [0]}, {"area": "コアデータの概念", "sub": "一般的なデータワークロード", "type": "single", "q": "OLTPシステムの特徴として最も適切なものはどれですか？", "options": ["多数のユーザーによる短い読み書きを低遅延で処理する", "主に過去データの大規模集計を行う", "リアルタイム可視化が唯一の目的", "データを一切更新しない"], "explanation": "OLTPは多数の同時ユーザーによる小さなトランザクション（挿入・更新・参照）を低遅延で処理することに最適化されています。", "id": 22, "answer": [0]}, {"area": "コアデータの概念", "sub": "一般的なデータワークロード", "type": "single", "q": "分析ワークロード（OLAP）でよく使われるデータの読み方として適切なものはどれですか？", "options": ["大量データの集約・グループ化・集計", "1件ずつの更新を高頻度に行う", "主キーで1行を取得するだけ", "行ロックを多用する更新中心"], "explanation": "分析ワークロードは大量データをグループ化・集約して傾向を見るため、読み取り中心で集計に最適化されています。", "id": 23, "answer": [0]}, {"area": "コアデータの概念", "sub": "一般的なデータワークロード", "type": "single", "q": "OLTPとOLAPの典型的な使い分けとして正しいものはどれですか？", "options": ["OLTPは業務処理、OLAPは分析・レポート", "OLTPは分析、OLAPは業務処理", "どちらも同じ用途", "両方ともバックアップ専用"], "explanation": "OLTPは日々の業務トランザクション処理、OLAPは蓄積データの分析・レポートに用いられます。両者を分離して最適化するのが一般的です。", "id": 24, "answer": [0]}, {"area": "コアデータの概念", "sub": "一般的なデータワークロード", "type": "single", "q": "トランザクション処理で『一部だけ成功して中途半端になる』のを防ぐACIDの特性はどれですか？", "options": ["原子性（Atomicity）", "分離性（Isolation）", "永続性（Durability）", "一貫性（Consistency）"], "explanation": "原子性は、トランザクション内の処理が『すべて成功』か『すべて失敗』のどちらかになることを保証し、中途半端な状態を防ぎます。", "id": 25, "answer": [0]}, {"area": "コアデータの概念", "sub": "一般的なデータワークロード", "type": "single", "q": "分析用に複数の業務システムからデータを集約・整形して蓄積する仕組みを一般に何と呼びますか？", "options": ["データウェアハウス", "OLTPデータベース", "キャッシュ", "メッセージキュー"], "explanation": "データウェアハウスは、複数ソースのデータを集約・整形して分析向けに蓄積するデータストアで、OLAPの基盤になります。", "id": 26, "answer": [0]}, {"area": "コアデータの概念", "sub": "役割と責任", "type": "single", "q": "データベースの可用性・バックアップ・セキュリティ・性能を維持・管理する役割はどれですか？", "options": ["データベース管理者（DBA）", "データエンジニア", "データアナリスト", "プロジェクトマネージャー"], "explanation": "DBA（Database Administrator）は、データベースの設計運用・バックアップ・セキュリティ・パフォーマンス管理などに責任を持ちます。", "id": 27, "answer": [0]}, {"area": "コアデータの概念", "sub": "役割と責任", "type": "single", "q": "データの取り込み・変換・パイプライン構築を担い、分析に使えるようデータ基盤を整備する役割はどれですか？", "options": ["データエンジニア", "データアナリスト", "データベース管理者", "営業担当者"], "explanation": "データエンジニアは、データの収集・変換（ETL/ELT）・パイプライン・ストレージ整備を担い、利用可能なデータ基盤を構築します。", "id": 28, "answer": [0]}, {"area": "コアデータの概念", "sub": "役割と責任", "type": "single", "q": "データを集計・可視化し、ビジネス上の洞察やレポートを提供する役割はどれですか？", "options": ["データアナリスト", "データベース管理者", "データエンジニア", "ネットワーク管理者"], "explanation": "データアナリストは、データを分析・可視化（例: Power BI）して、意思決定に役立つ洞察やレポートを提供します。", "id": 29, "answer": [0]}, {"area": "コアデータの概念", "sub": "役割と責任", "type": "single", "q": "『Power BIでダッシュボードを作成し、傾向を経営層に報告する』のは主にどの役割の仕事ですか？", "options": ["データアナリスト", "データエンジニア", "データベース管理者", "セキュリティ管理者"], "explanation": "可視化やレポート作成、洞察の提示はデータアナリストの主な責務です。", "id": 30, "answer": [0]}, {"area": "コアデータの概念", "sub": "役割と責任", "type": "single", "q": "『Azure Data Factoryでパイプラインを作り、データレイクにデータを取り込む』のは主にどの役割の仕事ですか？", "options": ["データエンジニア", "データアナリスト", "データベース管理者", "エンドユーザー"], "explanation": "データの取り込み・変換・パイプライン構築はデータエンジニアの主な責務です。", "id": 31, "answer": [0]}, {"area": "コアデータの概念", "sub": "役割と責任", "type": "single", "q": "『本番データベースのバックアップとリストア計画、アクセス権の管理』を担うのは主にどの役割ですか？", "options": ["データベース管理者（DBA）", "データアナリスト", "データエンジニア", "Webデザイナー"], "explanation": "バックアップ・復旧・セキュリティ・権限管理・性能チューニングはDBAの中心的な責務です。", "id": 32, "answer": [0]}, {"area": "コアデータの概念", "sub": "役割と責任", "type": "single", "q": "データエンジニアが主に扱う作業として適切なものはどれですか？", "options": ["ETL/ELTによるデータの変換と統合", "経営報告用スライドのデザイン", "営業先の開拓", "ネットワーク機器の物理配線"], "explanation": "データエンジニアはETL/ELTでデータを抽出・変換・読み込みし、分析に使えるよう統合・整備します。", "id": 33, "answer": [0]}, {"area": "コアデータの概念", "sub": "役割と責任", "type": "single", "q": "データアナリストが価値を提供する主な手段として最も適切なものはどれですか？", "options": ["可視化・レポートによる洞察の提示", "データベースのパッチ適用", "パイプラインの監視", "ストレージの冗長構成設計"], "explanation": "データアナリストは、データを分析し可視化・レポート化して、ビジネス上の意思決定に役立つ洞察を提供します。", "id": 34, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナルの概念", "type": "single", "q": "リレーショナルデータベースで、テーブル内の各行を一意に識別する列を何と呼びますか？", "options": ["主キー（プライマリキー）", "外部キー", "インデックス", "ビュー"], "explanation": "主キー（プライマリキー）は各行を一意に識別する列（または列の組）で、重複やNULLを許しません。", "id": 35, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナルの概念", "type": "single", "q": "あるテーブルの列が別テーブルの主キーを参照して関連付ける仕組みを何と呼びますか？", "options": ["外部キー（フォーリンキー）", "主キー", "インデックス", "正規化"], "explanation": "外部キーは他テーブルの主キーを参照し、テーブル間のリレーションシップ（参照整合性）を表します。", "id": 36, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナルの概念", "type": "single", "q": "データの重複を減らし整合性を高めるためにテーブルを適切に分割する設計手法を何と呼びますか？", "options": ["正規化", "非正規化", "インデックス作成", "シャーディング"], "explanation": "正規化は、重複を排除し更新異常を防ぐためにデータを複数のテーブルに分割し、キーで関連付ける設計手法です。", "id": 37, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナルの概念", "type": "single", "q": "正規化を行う主な目的として最も適切なものはどれですか？", "options": ["データの重複を減らし整合性を保つ", "クエリを必ず速くする", "画像を保存する", "ネットワークを暗号化する"], "explanation": "正規化の主目的はデータの重複削減と整合性維持です。分析向けには意図的に非正規化することもあります。", "id": 38, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナルの概念", "type": "single", "q": "SQLでテーブルからデータを取得する（問い合わせる）ために使う文はどれですか？", "options": ["SELECT", "INSERT", "DELETE", "CREATE"], "explanation": "SELECT文はテーブルからデータを取得（検索）するために使います。条件指定にはWHERE句を使います。", "id": 39, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナルの概念", "type": "single", "q": "テーブルに新しい行を追加するSQL文はどれですか？", "options": ["INSERT", "SELECT", "UPDATE", "DROP"], "explanation": "INSERT文はテーブルに新しい行（レコード）を追加します。既存行の変更はUPDATEです。", "id": 40, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナルの概念", "type": "single", "q": "既存の行の値を変更するSQL文はどれですか？", "options": ["UPDATE", "INSERT", "SELECT", "CREATE"], "explanation": "UPDATE文は既存の行の列値を変更します。対象行はWHERE句で指定します。", "id": 41, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナルの概念", "type": "single", "q": "テーブルの構造（列やテーブル自体）を定義・変更するSQLの分類はどれですか？", "options": ["DDL（データ定義言語）", "DML（データ操作言語）", "DCL（データ制御言語）", "TCL（トランザクション制御）"], "explanation": "DDL（CREATE/ALTER/DROPなど）はテーブルなどの構造を定義・変更します。データの追加・更新・削除はDML（INSERT/UPDATE/DELETE）です。", "id": 42, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナルの概念", "type": "single", "q": "INSERT・UPDATE・DELETEなど、データそのものを操作するSQLの分類はどれですか？", "options": ["DML（データ操作言語）", "DDL（データ定義言語）", "DCL（データ制御言語）", "DQLのみ"], "explanation": "DML（Data Manipulation Language）はINSERT/UPDATE/DELETEなどデータの操作を行います。構造の定義はDDLです。", "id": 43, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナルの概念", "type": "single", "q": "GRANTやREVOKEのように権限を付与・取り消しするSQLの分類はどれですか？", "options": ["DCL（データ制御言語）", "DDL（データ定義言語）", "DML（データ操作言語）", "SELECT文"], "explanation": "DCL（Data Control Language）はGRANT/REVOKEなどで権限を制御します。", "id": 44, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナルの概念", "type": "single", "q": "検索を高速化するために列に作成するデータベースオブジェクトはどれですか？", "options": ["インデックス", "ビュー", "トリガー", "シーケンス"], "explanation": "インデックスは特定の列に対する検索や並べ替えを高速化するオブジェクトです。ただし書き込みコストや容量は増えます。", "id": 45, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナルの概念", "type": "single", "q": "1つ以上のテーブルから定義した『仮想的なテーブル』として参照できるオブジェクトはどれですか？", "options": ["ビュー", "インデックス", "主キー", "スキーマ"], "explanation": "ビューは、クエリ結果を仮想テーブルとして扱えるオブジェクトで、複雑なクエリの再利用やアクセス制御に役立ちます。", "id": 46, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナルの概念", "type": "single", "q": "あらかじめ保存しておき、呼び出して実行できるSQLの処理のまとまりを何と呼びますか？", "options": ["ストアドプロシージャ", "インデックス", "主キー", "ビューのみ"], "explanation": "ストアドプロシージャは、データベースに保存された一連のSQL処理で、引数を取り再利用できます。", "id": 47, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナルの概念", "type": "single", "q": "リレーショナルデータの特徴として最も適切なものはどれですか？", "options": ["事前定義のスキーマを持ち、テーブル間をキーで関連付ける", "スキーマが一切ない", "画像専用", "必ず1テーブルのみで構成される"], "explanation": "リレーショナルデータは、列の型や制約を持つスキーマに従い、主キー・外部キーでテーブル同士を関連付けます。", "id": 48, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナルの概念", "type": "single", "q": "SQLで取得結果を特定条件に絞り込むために使う句はどれですか？", "options": ["WHERE", "ORDER BY のみ", "CREATE", "GRANT"], "explanation": "WHERE句は、SELECTやUPDATE/DELETEで対象行を条件によって絞り込むために使います。", "id": 49, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナルの概念", "type": "single", "q": "テーブルから行を削除するSQL文はどれですか？", "options": ["DELETE", "SELECT", "ALTER", "CREATE"], "explanation": "DELETE文はテーブルから行を削除します。WHERE句で対象を指定しないと全行が削除されます。", "id": 50, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナル系Azureサービス", "type": "single", "q": "フルマネージドなPaaSのリレーショナルデータベースで、SQL Serverエンジンを基盤とするサービスはどれですか？", "options": ["Azure SQL Database", "Azure Blob Storage", "Azure Cosmos DB", "Azure Data Lake"], "explanation": "Azure SQL DatabaseはSQL Serverベースのフルマネージドなリレーショナルデータベース（PaaS）で、パッチやバックアップを自動化します。", "id": 51, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナル系Azureサービス", "type": "single", "q": "オンプレミスのSQL Serverとの高い互換性を保ちつつ、ほぼフルマネージドで運用できるAzureサービスはどれですか？", "options": ["Azure SQL Managed Instance", "Azure SQL Database（単一DB）", "SQL Server on Azure VM", "Azure Files"], "explanation": "Azure SQL Managed Instanceは、SQL Serverとの互換性（インスタンスレベル機能）が高く、移行しやすいマネージドサービスです。", "id": 52, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナル系Azureサービス", "type": "single", "q": "OSやSQL Serverの構成を完全に制御したい場合に選ぶ、最もIaaS寄りの選択肢はどれですか？", "options": ["SQL Server on Azure Virtual Machines", "Azure SQL Database", "Azure SQL Managed Instance", "Azure Cosmos DB"], "explanation": "SQL Server on Azure VMはIaaSで、OSとSQL Serverを自分で完全に制御できます。その分、運用管理の責任も大きくなります。", "id": 53, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナル系Azureサービス", "type": "single", "q": "管理負担を最小にしたい場合、Azure SQLファミリーの中で最もマネージド度が高いのはどれですか？", "options": ["Azure SQL Database", "SQL Server on Azure VM", "オンプレミスSQL Server", "自前のLinuxにSQLを導入"], "explanation": "Azure SQL Database（PaaS）は最もマネージド度が高く、インフラやOSの管理が不要です。VMはIaaSで管理範囲が広くなります。", "id": 54, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナル系Azureサービス", "type": "single", "q": "Azureが提供するオープンソース系リレーショナルデータベースのマネージドサービスに含まれるものはどれですか？", "options": ["Azure Database for PostgreSQL", "Azure Blob Storage", "Azure Table Storage", "Azure Cache for Redis"], "explanation": "Azureは、Azure Database for PostgreSQL / MySQL / MariaDB といったオープンソースDBのマネージドサービスを提供します。", "id": 55, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナル系Azureサービス", "type": "single", "q": "次のうちAzureのオープンソースDBマネージドサービスとして提供されていないものはどれですか？", "options": ["Azure Database for Oracle", "Azure Database for MySQL", "Azure Database for PostgreSQL", "Azure Database for MariaDB"], "explanation": "AzureのマネージドOSS DBはMySQL・PostgreSQL・MariaDBです。Oracleはこのマネージドサービスとしては提供されていません（VM上での実行などは可能）。", "id": 56, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナル系Azureサービス", "type": "single", "q": "PaaSとIaaSの違いとして、Azure SQL DatabaseとSQL Server on VMを比較した説明で正しいものはどれですか？", "options": ["SQL DatabaseはPaaSで運用が自動化、VMはIaaSで自分で管理", "両方ともIaaS", "両方ともPaaS", "SQL DatabaseはIaaS、VMはPaaS"], "explanation": "Azure SQL DatabaseはPaaSでパッチ・バックアップ等が自動化されます。SQL Server on VMはIaaSでOS・SQLの管理を利用者が担います。", "id": 57, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナル系Azureサービス", "type": "single", "q": "既存のオンプレミスSQL Serverデータベースを、最小限の変更でAzureのマネージド環境へ移行したい場合に最適なのはどれですか？", "options": ["Azure SQL Managed Instance", "Azure Cosmos DB", "Azure Blob Storage", "Azure Table Storage"], "explanation": "Managed Instanceはインスタンスレベルの互換性が高く、オンプレSQL Serverのリフト＆シフト移行に適します。", "id": 58, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナル系Azureサービス", "type": "single", "q": "Azure SQL Databaseで自動的に提供される運用上の利点として最も適切なものはどれですか？", "options": ["自動バックアップとパッチ適用", "物理サーバーの手動増設", "OSの手動アップデート", "電源管理の手作業"], "explanation": "PaaSであるAzure SQL Databaseは、バックアップ・パッチ・高可用性などが自動化され、運用負担を大幅に軽減します。", "id": 59, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナル系Azureサービス", "type": "single", "q": "Web開発で広く使われるMySQLをAzure上でマネージドに利用したい場合に選ぶサービスはどれですか？", "options": ["Azure Database for MySQL", "Azure SQL Database", "Azure Cosmos DB", "Azure Synapse"], "explanation": "Azure Database for MySQLは、MySQLをフルマネージドで提供し、バックアップやスケールを自動化します。", "id": 60, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナル系Azureサービス", "type": "single", "q": "Azure SQL Databaseのデプロイオプションとして、複数DBでリソースを共有しコスト最適化できる仕組みはどれですか？", "options": ["エラスティックプール", "単一サーバーのみ", "読み取り専用レプリカのみ", "ストレージ階層のみ"], "explanation": "エラスティックプールは複数のデータベースでコンピューティングリソースを共有し、利用が変動する多数のDBのコストを最適化します。", "id": 61, "answer": [0]}, {"area": "リレーショナルデータ", "sub": "リレーショナル系Azureサービス", "type": "single", "q": "Azure SQL Databaseが内部的に基盤としているデータベースエンジンはどれですか？", "options": ["Microsoft SQL Server", "MySQL", "PostgreSQL", "MongoDB"], "explanation": "Azure SQL DatabaseはMicrosoft SQL Serverのエンジンを基盤としたPaaSで、T-SQLで操作できます。", "id": 62, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azureストレージ", "type": "single", "q": "画像・動画・バックアップなどの非構造化オブジェクトを格納するAzureストレージはどれですか？", "options": ["Azure Blob Storage", "Azure SQL Database", "Azure Cosmos DB", "Azure Synapse"], "explanation": "Azure Blob Storageは非構造化データ（オブジェクト）の格納に最適化されたストレージで、画像・動画・ログ・バックアップなどに使われます。", "id": 63, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azureストレージ", "type": "single", "q": "SMB/NFSでマウントして共有フォルダーのように使えるAzureストレージはどれですか？", "options": ["Azure File Storage", "Azure Blob Storage", "Azure Table Storage", "Azure Queue Storage"], "explanation": "Azure Files（File Storage）はSMB/NFSでマウントできるマネージドファイル共有で、オンプレミスのファイルサーバー置き換えにも使えます。", "id": 64, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azureストレージ", "type": "single", "q": "キーと属性によるスキーマレスな表形式データを安価に大量保存できるAzureストレージはどれですか？", "options": ["Azure Table Storage", "Azure Blob Storage", "Azure File Storage", "Azure SQL Database"], "explanation": "Azure Table Storageは、キー/属性ストアとして半構造化データを大量・安価に保存できるNoSQLストレージです。", "id": 65, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azureストレージ", "type": "single", "q": "アクセス頻度が非常に低い長期保管データに最適で、保存コストが最も安いBlobのアクセス層はどれですか？", "options": ["アーカイブ層", "ホット層", "クール層", "プレミアム層"], "explanation": "アーカイブ層は保存単価が最も安い一方、取り出しに時間がかかります。頻繁にアクセスするならホット層が適します。", "id": 66, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azureストレージ", "type": "single", "q": "頻繁にアクセスするデータに最適なBlobのアクセス層はどれですか？", "options": ["ホット層", "クール層", "アーカイブ層", "コールド層"], "explanation": "ホット層はアクセス頻度の高いデータ向けで、アクセスコストは低く保存コストは高めです。", "id": 67, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azureストレージ", "type": "single", "q": "ブロックBlob・追加Blob・ページBlobのうち、ランダム読み書きが必要な仮想ディスク向けはどれですか？", "options": ["ページBlob", "ブロックBlob", "追加Blob", "アーカイブBlob"], "explanation": "ページBlobはランダムな読み書きに最適化され、Azure VMの仮想ディスク（VHD）などに使われます。一般的なファイルはブロックBlobです。", "id": 68, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azureストレージ", "type": "single", "q": "ストレージアカウントのデータを単一データセンター内で3重に複製する、最も安価な冗長オプションはどれですか？", "options": ["ローカル冗長ストレージ（LRS）", "geo冗長ストレージ（GRS）", "読み取りアクセスgeo冗長（RA-GRS）", "ゾーン冗長（ZRS）"], "explanation": "LRSは同一データセンター内で3つのコピーを保持する最も安価な冗長方式です。リージョン障害には対応できません。", "id": 69, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azureストレージ", "type": "single", "q": "別リージョンにもデータを複製してリージョン障害に備える冗長オプションはどれですか？", "options": ["geo冗長ストレージ（GRS）", "ローカル冗長（LRS）", "単一ディスク", "スナップショットのみ"], "explanation": "GRSはプライマリとは別リージョンにもデータを複製し、リージョン規模の障害から保護します。", "id": 70, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azureストレージ", "type": "single", "q": "ビッグデータ分析向けに階層型名前空間を備え、Blob上に構築される大容量データレイク用ストレージはどれですか？", "options": ["Azure Data Lake Storage Gen2", "Azure Table Storage", "Azure Queue Storage", "Azure Cache for Redis"], "explanation": "Azure Data Lake Storage Gen2はBlob Storage上に階層型名前空間を加えたもので、大規模分析（データレイク）に適します。", "id": 71, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azureストレージ", "type": "single", "q": "オンプレミスとAzure Files間でファイルを同期し、よく使うファイルをローカルにキャッシュする機能はどれですか？", "options": ["Azure File Sync", "AzCopyのみ", "Azure Migrate", "Azure Bastion"], "explanation": "Azure File Syncは、オンプレミスのファイルサーバーとAzure Filesを同期し、階層化（クラウド階層化）でローカル容量を節約できます。", "id": 72, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azureストレージ", "type": "single", "q": "Blob Storageに格納したデータへHTTP/HTTPSでアクセスできる理由として正しいものはどれですか？", "options": ["各Blobに一意のURLが割り当てられるため", "必ずVPNが必要なため", "ローカルのみアクセス可能なため", "FTP専用のため"], "explanation": "Blobには一意のURLが割り当てられ、HTTP/HTTPSでアクセスできます。アクセス制御にはキーやSAS、RBACを用います。", "id": 73, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azureストレージ", "type": "single", "q": "非リレーショナルデータを扱う主な理由として最も適切なものはどれですか？", "options": ["柔軟なスキーマと大規模・高速なスケールが必要な場合に適する", "必ず結合（JOIN）が多用される場合に最適", "常にトランザクション整合性が最優先の場合のみ", "構造化データにしか使えない"], "explanation": "非リレーショナル（NoSQL）は、柔軟なスキーマ、大規模分散、高速な読み書き・スケールが求められる用途に適します。", "id": 74, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azure Cosmos DB", "type": "single", "q": "グローバル分散と低遅延を特長とする、Azureのフルマネージドな非リレーショナル（NoSQL）データベースはどれですか？", "options": ["Azure Cosmos DB", "Azure SQL Database", "Azure Blob Storage", "Azure Synapse Analytics"], "explanation": "Azure Cosmos DBは複数リージョンに分散でき、世界規模で低遅延・高可用性を実現するマネージドNoSQLデータベースです。", "id": 75, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azure Cosmos DB", "type": "single", "q": "Azure Cosmos DBのユースケースとして最も適切なものはどれですか？", "options": ["世界中のユーザーに低遅延で応答する必要があるアプリ", "厳密な多テーブル結合の会計バッチのみ", "単一サーバーの小規模社内集計のみ", "画像のアーカイブ保管のみ"], "explanation": "Cosmos DBは、グローバルに分散したユーザーへ低遅延で応答する必要があるWeb/モバイル/IoTアプリなどに適します。", "id": 76, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azure Cosmos DB", "type": "single", "q": "Azure Cosmos DBでJSONドキュメントを扱う、既定のネイティブAPIはどれですか？", "options": ["NoSQL（Core/SQL）API", "Cassandra API", "Gremlin API", "Table API"], "explanation": "Cosmos DBのNoSQL（旧Core/SQL）APIはJSONドキュメントを格納し、SQLライクな構文でクエリできるネイティブAPIです。", "id": 77, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azure Cosmos DB", "type": "single", "q": "既存のMongoDBアプリをほぼ変更せずにCosmos DBへ移行したい場合に使うAPIはどれですか？", "options": ["MongoDB用API", "Gremlin API", "Table API", "Cassandra API"], "explanation": "Cosmos DBのMongoDB用APIはMongoDBのワイヤプロトコルと互換性があり、既存のMongoDBアプリやツールをほぼそのまま利用できます。", "id": 78, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azure Cosmos DB", "type": "single", "q": "ノードとエッジで関係性を表すグラフデータを扱うCosmos DBのAPIはどれですか？", "options": ["Gremlin API", "NoSQL API", "Table API", "Cassandra API"], "explanation": "Gremlin APIはグラフ（頂点と辺）を扱うAPIで、ソーシャルネットワークや推薦などの関係探索に適します。", "id": 79, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azure Cosmos DB", "type": "single", "q": "列指向のワイドカラムデータを扱い、Apache Cassandra互換で利用できるCosmos DBのAPIはどれですか？", "options": ["Cassandra API", "NoSQL API", "Gremlin API", "MongoDB用API"], "explanation": "Cassandra APIはApache Cassandra互換のワイドカラム（列ファミリー）データを扱え、既存のCassandraアプリを移行できます。", "id": 80, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azure Cosmos DB", "type": "single", "q": "Azure Table Storageに似たキー/値テーブルを、よりリッチに扱えるCosmos DBのAPIはどれですか？", "options": ["Table API", "Gremlin API", "Cassandra API", "NoSQL API"], "explanation": "Cosmos DBのTable APIは、Azure Table Storageと互換のキー/値テーブルを、グローバル分散や低遅延などの利点付きで利用できます。", "id": 81, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azure Cosmos DB", "type": "single", "q": "Azure Cosmos DBの主な利点として最も適切なものはどれですか？", "options": ["1桁ミリ秒の低遅延とグローバル分散、自動スケール", "厳密な正規化を強制する", "画像専用の保存に最適", "常に単一リージョンに固定される"], "explanation": "Cosmos DBは、複数リージョン分散・1桁ミリ秒級の低遅延・自動スケール・複数の整合性レベルなどを特長とします。", "id": 82, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azure Cosmos DB", "type": "single", "q": "Cosmos DBが複数の整合性レベル（強整合〜結果整合）を選べる主な目的はどれですか？", "options": ["遅延・可用性と整合性のトレードオフを用途に応じて調整するため", "データを暗号化するため", "SQLを無効化するため", "必ず最強整合のみにするため"], "explanation": "Cosmos DBは強整合から結果整合まで複数の整合性レベルを提供し、遅延・可用性・整合性のバランスを用途に合わせて選べます。", "id": 83, "answer": [0]}, {"area": "非リレーショナルデータ", "sub": "Azure Cosmos DB", "type": "single", "q": "IoTデバイスから世界中で大量に届くテレメトリを低遅延で取り込み・参照する用途に適すのはどれですか？", "options": ["Azure Cosmos DB", "Azure SQL Managed Instance", "Azure Files", "オンプレミスの単一SQL Server"], "explanation": "グローバル分散・高スループット・低遅延を持つCosmos DBは、IoTテレメトリのような大量・分散データの取り込みと参照に適します。", "id": 84, "answer": [0]}, {"area": "分析ワークロード", "sub": "大規模分析の要素", "type": "single", "q": "複数のソースからデータを抽出・変換・読み込みする処理を一般に何と呼びますか？", "options": ["ETL / ELT", "OLTP", "RBAC", "ACID"], "explanation": "ETL（抽出・変換・読み込み）やELT（抽出・読み込み・変換）は、分析基盤へデータを取り込み整える代表的なプロセスです。", "id": 85, "answer": [0]}, {"area": "分析ワークロード", "sub": "大規模分析の要素", "type": "single", "q": "ノーコード/ローコードでデータの取り込みや変換のパイプラインを構築できるAzureのデータ統合サービスはどれですか？", "options": ["Azure Data Factory", "Azure Blob Storage", "Power BI Desktop", "Azure Monitor"], "explanation": "Azure Data Factoryは、データの取り込み・変換・移動を行うパイプラインを構築するクラウドのデータ統合（ETL/ELT）サービスです。", "id": 86, "answer": [0]}, {"area": "分析ワークロード", "sub": "大規模分析の要素", "type": "single", "q": "分析向けに整形・集約した構造化データを大量に蓄積する分析データストアを何と呼びますか？", "options": ["データウェアハウス", "メッセージキュー", "キャッシュ", "ファイル共有"], "explanation": "データウェアハウスは、分析用に整形・統合した構造化データを蓄積し、集計・レポートに最適化されたデータストアです。", "id": 87, "answer": [0]}, {"area": "分析ワークロード", "sub": "大規模分析の要素", "type": "single", "q": "あらゆる形式（構造化・半構造化・非構造化）の生データを大規模に保管できるストアを何と呼びますか？", "options": ["データレイク", "データウェアハウスのみ", "リレーショナルDBのみ", "キャッシュ"], "explanation": "データレイクは、構造化・半構造化・非構造化を問わず生データを大規模・低コストに保管でき、後続の分析や加工に使われます。", "id": 88, "answer": [0]}, {"area": "分析ワークロード", "sub": "大規模分析の要素", "type": "single", "q": "データウェアハウスとビッグデータ分析を統合したAzureのエンタープライズ分析サービスはどれですか？", "options": ["Azure Synapse Analytics", "Azure Blob Storage", "Azure Cache for Redis", "Azure DNS"], "explanation": "Azure Synapse Analyticsは、データウェアハウスとビッグデータ分析（Spark/SQL）を統合した分析プラットフォームです。", "id": 89, "answer": [0]}, {"area": "分析ワークロード", "sub": "大規模分析の要素", "type": "single", "q": "Apache Sparkベースで大規模データ処理や機械学習を行えるAzureの分析サービスはどれですか？", "options": ["Azure Databricks", "Azure Files", "Azure Queue Storage", "Azure Bastion"], "explanation": "Azure Databricksは、Apache Sparkベースの分析プラットフォームで、大規模データ処理・データエンジニアリング・機械学習に使われます。", "id": 90, "answer": [0]}, {"area": "分析ワークロード", "sub": "大規模分析の要素", "type": "single", "q": "データ統合・データウェアハウス・分析・BIをSaaSとして一体提供するMicrosoftの統合分析プラットフォームはどれですか？", "options": ["Microsoft Fabric", "Azure DNS", "Azure Bastion", "Azure Key Vault"], "explanation": "Microsoft Fabricは、データ統合・データエンジニアリング・データウェアハウス・リアルタイム分析・Power BIを統合したSaaS型分析基盤です。", "id": 91, "answer": [0]}, {"area": "分析ワークロード", "sub": "大規模分析の要素", "type": "single", "q": "Microsoft Fabricで全コンポーネントが共有する単一の統合データレイク基盤を何と呼びますか？", "options": ["OneLake", "Blobのみ", "DataverseのみのDB", "ローカルディスク"], "explanation": "OneLakeはMicrosoft Fabricの統合データレイクで、組織全体のデータを一元的に格納し各ワークロードで共有します。", "id": 92, "answer": [0]}, {"area": "分析ワークロード", "sub": "大規模分析の要素", "type": "single", "q": "ELT（抽出・読み込み・変換）がETLと異なる主な点はどれですか？", "options": ["先に格納してから変換する（変換を後段で行う）", "変換を一切行わない", "データを削除する処理である", "可視化の手法である"], "explanation": "ELTは、まずデータを取り込んで（読み込み）格納し、後でターゲット側の計算資源を使って変換します。大規模データやデータレイクで有効です。", "id": 93, "answer": [0]}, {"area": "分析ワークロード", "sub": "大規模分析の要素", "type": "single", "q": "分析基盤における『データ取り込み（インジェスト）』の説明として正しいものはどれですか？", "options": ["各種ソースからデータを収集して取り込むこと", "データを可視化すること", "権限を付与すること", "ネットワークを暗号化すること"], "explanation": "データインジェストは、ファイル・データベース・ストリームなど各種ソースからデータを収集し分析基盤へ取り込むプロセスです。", "id": 94, "answer": [0]}, {"area": "分析ワークロード", "sub": "大規模分析の要素", "type": "single", "q": "データウェアハウスとデータレイクの違いとして正しいものはどれですか？", "options": ["DWは整形済み構造化データ中心、レイクは生データを多様な形式で保管", "両者は完全に同じ", "レイクは構造化データ専用", "DWは画像専用"], "explanation": "データウェアハウスは整形済みの構造化データを分析向けに蓄積し、データレイクは生データを多様な形式のまま大規模に保管します。", "id": 95, "answer": [0]}, {"area": "分析ワークロード", "sub": "大規模分析の要素", "type": "single", "q": "大規模分析パイプラインの一般的な流れとして正しい順序はどれですか？", "options": ["取り込み → 処理/変換 → 格納 → 分析・可視化", "可視化 → 取り込み → 削除", "分析 → 取り込み → 破棄", "暗号化 → 可視化 → 取り込み"], "explanation": "一般に、データを取り込み、処理・変換し、分析ストアに格納し、最後に分析・可視化する流れになります。", "id": 96, "answer": [0]}, {"area": "分析ワークロード", "sub": "大規模分析の要素", "type": "single", "q": "Azure SynapseでサーバーレスにデータレイクのファイルをSQLで分析できる機能はどれですか？", "options": ["サーバーレスSQLプール", "専用VMのみ", "Power BIのみ", "Blobのアクセス層"], "explanation": "Synapseのサーバーレス SQLプールは、データレイク上のファイルにスキーマを適用してSQLでアドホックに分析でき、事前のプロビジョニングが不要です。", "id": 97, "answer": [0]}, {"area": "分析ワークロード", "sub": "大規模分析の要素", "type": "single", "q": "データエンジニアが大規模分析基盤で主に担う作業はどれですか？", "options": ["パイプライン構築とデータの変換・整備", "経営報告スライドの作成", "顧客への営業", "物理サーバーの配線"], "explanation": "データエンジニアは、取り込み・変換のパイプラインを構築し、分析に使えるようデータを整備します。", "id": 98, "answer": [0]}, {"area": "分析ワークロード", "sub": "大規模分析の要素", "type": "single", "q": "分析用データストアとして『専用SQLプール（旧SQL DW）』が適すのはどんな場合ですか？", "options": ["大規模な構造化データに対する高性能なデータウェアハウス処理", "少量データのキャッシュ", "画像の長期保管", "リアルタイムのメッセージ配信"], "explanation": "Synapseの専用SQLプールはMPP（並列処理）により、大規模な構造化データのデータウェアハウス分析を高性能に行えます。", "id": 99, "answer": [0]}, {"area": "分析ワークロード", "sub": "大規模分析の要素", "type": "single", "q": "データレイクに最適な、列指向で圧縮効率の高い分析向けファイル形式はどれですか？", "options": ["Parquet", "DOCX", "JPEG", "EXE"], "explanation": "Parquetは列指向で圧縮・スキャン効率が高く、データレイクや大規模分析で標準的に使われる形式です。", "id": 100, "answer": [0]}, {"area": "分析ワークロード", "sub": "リアルタイム分析", "type": "single", "q": "一定量のデータをまとめて定期的に処理する方式を何と呼びますか？", "options": ["バッチ処理", "ストリーミング処理", "トランザクション処理", "正規化"], "explanation": "バッチ処理は、データを一定量・一定期間ためてからまとめて処理する方式です。日次集計などに用いられます。", "id": 101, "answer": [0]}, {"area": "分析ワークロード", "sub": "リアルタイム分析", "type": "single", "q": "データが生成されるそばから連続的に処理する方式を何と呼びますか？", "options": ["ストリーミング処理", "バッチ処理", "正規化", "インデックス作成"], "explanation": "ストリーミング処理は、データが到着するそばから連続的に処理する方式で、リアルタイム分析に用いられます。", "id": 102, "answer": [0]}, {"area": "分析ワークロード", "sub": "リアルタイム分析", "type": "single", "q": "バッチ処理とストリーミング処理の主な違いはどれですか？", "options": ["バッチはまとめて、ストリーミングは到着次第逐次処理する", "両者は同じ", "ストリーミングは月次のみ", "バッチはリアルタイム専用"], "explanation": "バッチは一定量をためてまとめて処理し、ストリーミングはデータ到着のたびに低遅延で逐次処理します。", "id": 103, "answer": [0]}, {"area": "分析ワークロード", "sub": "リアルタイム分析", "type": "single", "q": "流れてくるストリームデータをSQLライクなクエリでリアルタイムに分析するAzureサービスはどれですか？", "options": ["Azure Stream Analytics", "Azure Blob Storage", "Azure SQL Database", "Azure Files"], "explanation": "Azure Stream Analyticsは、IoTやイベントのストリームをSQLライクなクエリでリアルタイムに処理・集計するサービスです。", "id": 104, "answer": [0]}, {"area": "分析ワークロード", "sub": "リアルタイム分析", "type": "single", "q": "大量のイベント/テレメトリを高スループットで取り込む、リアルタイム分析の入口となるAzureサービスはどれですか？", "options": ["Azure Event Hubs", "Azure Files", "Azure Table Storage", "Azure DNS"], "explanation": "Azure Event Hubsは、毎秒大量のイベントを取り込めるビッグデータ用のストリーム取り込みサービスで、リアルタイム分析の入口になります。", "id": 105, "answer": [0]}, {"area": "分析ワークロード", "sub": "リアルタイム分析", "type": "single", "q": "IoTデバイスとの双方向通信やデバイス管理に特化した、リアルタイムデータ取り込み向けサービスはどれですか？", "options": ["Azure IoT Hub", "Azure Blob Storage", "Azure SQL Database", "Azure Bastion"], "explanation": "Azure IoT Hubは、多数のIoTデバイスとの安全な双方向通信・管理・テレメトリ取り込みを担い、リアルタイム分析に接続できます。", "id": 106, "answer": [0]}, {"area": "分析ワークロード", "sub": "リアルタイム分析", "type": "single", "q": "リアルタイム分析が適するシナリオとして最も適切なものはどれですか？", "options": ["センサーデータを即座に監視し異常を検知する", "年に一度の決算集計のみ", "静的な画像の保管", "紙書類の電子化のみ"], "explanation": "リアルタイム分析は、センサーやログを即時に処理して異常検知・ダッシュボード更新・アラートを行う用途に適します。", "id": 107, "answer": [0]}, {"area": "分析ワークロード", "sub": "リアルタイム分析", "type": "single", "q": "Microsoft Fabricでストリーミングデータの取り込み・分析をリアルタイムに扱うワークロードはどれですか？", "options": ["リアルタイムインテリジェンス（Real-Time Intelligence）", "Power BI のみ", "データウェアハウスのみ", "Blobの階層化のみ"], "explanation": "Microsoft Fabricのリアルタイムインテリジェンスは、ストリーミングデータの取り込み・分析・可視化をリアルタイムに行うワークロードです。", "id": 108, "answer": [0]}, {"area": "分析ワークロード", "sub": "Power BIによる可視化", "type": "single", "q": "データを集計・可視化してレポートやダッシュボードを作成するMicrosoftのBIツールはどれですか？", "options": ["Power BI", "Power Automate", "Azure Cosmos DB", "Azure Data Factory"], "explanation": "Power BIは、データに接続して可視化（グラフ・表・ダッシュボード）し、洞察を共有するためのビジネスインテリジェンスツールです。", "id": 109, "answer": [0]}, {"area": "分析ワークロード", "sub": "Power BIによる可視化", "type": "single", "q": "レポートを作成・編集するためにPCにインストールして使うPower BIのアプリはどれですか？", "options": ["Power BI Desktop", "Power BI サービス（クラウド）", "Power BI モバイル", "Power BI ゲートウェイ"], "explanation": "Power BI Desktopは、データ接続・モデリング・レポート作成を行うWindows向けの開発ツールです。共有・配布はPower BIサービスで行います。", "id": 110, "answer": [0]}, {"area": "分析ワークロード", "sub": "Power BIによる可視化", "type": "single", "q": "作成したレポートを公開・共有し、ブラウザで閲覧・ダッシュボード化するPower BIの提供形態はどれですか？", "options": ["Power BI サービス（クラウド）", "Power BI Desktop のみ", "Excelのみ", "SQL Serverのみ"], "explanation": "Power BIサービス（app.powerbi.com）は、レポートの公開・共有・ダッシュボード作成・コラボレーションを行うクラウドサービスです。", "id": 111, "answer": [0]}, {"area": "分析ワークロード", "sub": "Power BIによる可視化", "type": "single", "q": "時間の経過に伴う売上の推移など、連続的な傾向を示すのに最も適した可視化はどれですか？", "options": ["折れ線グラフ", "円グラフ", "単一カード", "テーブルのみ"], "explanation": "折れ線グラフは、時間など連続軸に沿った傾向・推移の表現に適しています。", "id": 112, "answer": [0]}, {"area": "分析ワークロード", "sub": "Power BIによる可視化", "type": "single", "q": "カテゴリ間の値の大小を比較するのに最も適した可視化はどれですか？", "options": ["棒グラフ（縦棒/横棒）", "折れ線グラフ", "地図", "単一の数値カード"], "explanation": "棒グラフはカテゴリごとの数量の比較に適しています。推移は折れ線、地理は地図が適します。", "id": 113, "answer": [0]}, {"area": "分析ワークロード", "sub": "Power BIによる可視化", "type": "single", "q": "全体に対する各部分の構成比（割合）を示すのに適した可視化はどれですか？", "options": ["円グラフ／ドーナツグラフ", "折れ線グラフ", "散布図", "ゲージのみ"], "explanation": "円グラフ・ドーナツグラフは、全体に占める各カテゴリの割合（構成比）を示すのに適します（項目数が多いと見づらくなります）。", "id": 114, "answer": [0]}, {"area": "分析ワークロード", "sub": "Power BIによる可視化", "type": "single", "q": "地域ごとの売上を地図上に表現したい場合に適したPower BIの可視化はどれですか？", "options": ["マップ（地図）ビジュアル", "折れ線グラフ", "テーブル", "カード"], "explanation": "地理的な分布を示すにはマップ（地図）ビジュアルが適し、地域別の値を視覚的に把握できます。", "id": 115, "answer": [0]}, {"area": "分析ワークロード", "sub": "Power BIによる可視化", "type": "single", "q": "単一の重要指標（KPIの実数値など）を大きく1つだけ表示するのに適した可視化はどれですか？", "options": ["カード", "散布図", "折れ線グラフ", "ツリーマップ"], "explanation": "カードビジュアルは、合計売上などの単一の重要な数値を大きく表示するのに適します。", "id": 116, "answer": [0]}, {"area": "分析ワークロード", "sub": "Power BIによる可視化", "type": "single", "q": "Power BIのデータモデルで、複数テーブルを関連付ける仕組みを何と呼びますか？", "options": ["リレーションシップ", "ビジュアル", "スライサー", "テーマ"], "explanation": "Power BIのデータモデルでは、テーブル間にリレーションシップを定義して関連付け、横断的に集計・分析できます。", "id": 117, "answer": [0]}, {"area": "分析ワークロード", "sub": "Power BIによる可視化", "type": "single", "q": "Power BIのデータモデルで集計列やメジャーを定義するために使う数式言語はどれですか？", "options": ["DAX", "T-SQL", "Power Fx", "KQL"], "explanation": "DAX（Data Analysis Expressions）は、Power BIのメジャーや計算列を定義するための数式言語です。", "id": 118, "answer": [0]}, {"area": "分析ワークロード", "sub": "Power BIによる可視化", "type": "single", "q": "Power BIでレポート閲覧者が値を選んで全ビジュアルを絞り込めるフィルター用コントロールはどれですか？", "options": ["スライサー", "カード", "テーマ", "ゲートウェイ"], "explanation": "スライサーは、レポート上で期間やカテゴリなどを選んでビジュアル全体を対話的に絞り込めるフィルターコントロールです。", "id": 119, "answer": [0]}, {"area": "分析ワークロード", "sub": "Power BIによる可視化", "type": "single", "q": "Power BIでデータの取り込み時に整形・クレンジングを行うために使うツールはどれですか？", "options": ["Power Query", "DAXのみ", "スライサー", "ダッシュボードのみ"], "explanation": "Power Queryは、データの接続・整形・クレンジング（ETL的な前処理）を行うためのツールで、Power BIに組み込まれています。", "id": 120, "answer": [0]}];
+
+/* ===== 公式カテゴリ構造（DP-900 スキル測定の機能グループに準拠） ===== */
+const CATEGORY_TREE = [
+  {area:"コアデータの概念", subs:["データの表現方法","データストレージの選択肢","一般的なデータワークロード","役割と責任"]},
+  {area:"リレーショナルデータ", subs:["リレーショナルの概念","リレーショナル系Azureサービス"]},
+  {area:"非リレーショナルデータ", subs:["Azureストレージ","Azure Cosmos DB"]},
+  {area:"分析ワークロード", subs:["大規模分析の要素","リアルタイム分析","Power BIによる可視化"]}
+];
+const SUB_ORDER = CATEGORY_TREE.flatMap(c=>c.subs);
+const SUB_PARENT = {};
+CATEGORY_TREE.forEach(c=>c.subs.forEach(s=>SUB_PARENT[s]=c.area));
+
+const LS_KEY = "dp900_v1";
+const ABC = ["A","B","C","D","E","F"];
+
+/* ===== 学習記録（localStorage） ===== */
+function loadStats(){
+  let s; try{ s = JSON.parse(localStorage.getItem(LS_KEY)); }catch(e){ s=null; }
+  if(!s) s = {};
+  s.total = s.total||0; s.correct = s.correct||0;
+  s.dom = s.dom||{}; s.wrong = s.wrong||[]; s.hist = s.hist||[];
+  return s;
+}
+function saveStats(s){ try{ localStorage.setItem(LS_KEY, JSON.stringify(s)); }catch(e){} }
+let stats = loadStats();
+
+/* ===== 状態 ===== */
+let quiz = { list:[], idx:0, score:0, mode:"normal", revealed:false, sel:[], wrongThis:[], optOrder:[] };
+
+/* ===== ユーティリティ ===== */
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function byId(id){ return QUESTIONS.find(q=>q.id===id); }
+function arrEq(a,b){ if(a.length!==b.length) return false; const x=[...a].sort((m,n)=>m-n),y=[...b].sort((m,n)=>m-n); return x.every((v,i)=>v===y[i]); }
+
+/* ===== 初期化 ===== */
+function init(){
+  document.getElementById("qtotal").textContent = QUESTIONS.length;
+  const sel = document.getElementById("selDomain");
+  sel.innerHTML = "";
+  const optAll = document.createElement("option");
+  optAll.value = "__all__"; optAll.textContent = "すべて（全"+QUESTIONS.length+"問）";
+  sel.appendChild(optAll);
+  CATEGORY_TREE.forEach(c=>{
+    const og = document.createElement("optgroup");
+    og.label = c.area;
+    c.subs.forEach(s=>{
+      const n = QUESTIONS.filter(q=>q.sub===s).length;
+      const o = document.createElement("option");
+      o.value = s; o.textContent = s+"（"+n+"問）";
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  });
+  renderDash();
+  renderReviewInfo();
+}
+
+function renderDash(){
+  const el = document.getElementById("dashBody");
+  const acc = stats.total ? Math.round(stats.correct/stats.total*100) : 0;
+  if(stats.total===0){
+    el.innerHTML = '<div class="muted">まだ記録がありません。まずは10問やってみましょう。</div>';
+    return;
+  }
+  let h = '<div class="stats">'
+    + '<div class="stat"><div class="n">'+stats.total+'</div><div class="l">解答数</div></div>'
+    + '<div class="stat"><div class="n">'+acc+'%</div><div class="l">正答率</div></div>'
+    + '<div class="stat"><div class="n">'+stats.wrong.length+'</div><div class="l">要復習</div></div>'
+    + '</div>';
+  CATEGORY_TREE.forEach(c=>{
+    h += '<div class="domgroup">'+c.area+'</div>';
+    c.subs.forEach(s=>{
+      const dd = stats.dom[s]||{a:0,c:0};
+      const p = dd.a ? Math.round(dd.c/dd.a*100) : 0;
+      const col = !dd.a ? "var(--line)" : (p>=70?"var(--ok)":(p>=40?"var(--warn)":"var(--ng)"));
+      h += '<div class="domrow"><div class="nm">'+s+'</div>'
+        + '<div class="track"><div class="fill" style="width:'+p+'%;background:'+col+'"></div></div>'
+        + '<div class="pc">'+(dd.a?p+'%':'—')+'</div></div>';
+    });
+  });
+  if(stats.hist.length){
+    const last = stats.hist.slice(-5).map(x=>x+'%').join(" → ");
+    h += '<div class="trend">直近の成績: '+last+'</div>';
+  }
+  el.innerHTML = h;
+}
+
+function renderReviewInfo(){
+  const info = document.getElementById("reviewInfo");
+  const btn = document.getElementById("reviewBtn");
+  const n = stats.wrong.length;
+  if(n===0){
+    info.textContent = "まだ要復習の問題はありません。通常演習で間違えると、ここに溜まります。";
+    btn.disabled = true; btn.textContent = "要復習の問題はありません";
+  } else {
+    info.textContent = "要復習: "+n+"問。間違えた問題だけを集中的に解き直せます。";
+    btn.disabled = false; btn.textContent = "間違えた問題を復習する（"+n+"問）";
+  }
+}
+
+/* ===== クイズ開始 ===== */
+function startQuiz(mode){
+  let list = [];
+  if(mode==="review"){
+    list = stats.wrong.map(byId).filter(Boolean);
+    if(list.length===0){ alert("復習する問題がありません。"); return; }
+    list = shuffle(list);
+  } else {
+    const dom = document.getElementById("selDomain").value;
+    const cnt = parseInt(document.getElementById("selCount").value,10);
+    const ord = document.getElementById("selOrder").value;
+    list = dom==="__all__" ? QUESTIONS.slice() : QUESTIONS.filter(q=>q.sub===dom);
+    list = ord==="random" ? shuffle(list) : list.slice();
+    if(cnt<list.length) list = list.slice(0,cnt);
+  }
+  quiz = { list, idx:0, score:0, mode, revealed:false, sel:[], wrongThis:[], optOrder:[] };
+  document.getElementById("start").classList.add("hide");
+  document.getElementById("result").classList.add("hide");
+  document.getElementById("quiz").classList.remove("hide");
+  renderQuestion();
+  window.scrollTo(0,0);
+}
+
+function renderQuestion(){
+  const q = quiz.list[quiz.idx];
+  quiz.revealed = false; quiz.sel = [];
+  quiz.optOrder = shuffle(q.options.map((_,i)=>i));
+  document.getElementById("qProgress").textContent = (quiz.idx+1)+" / "+quiz.list.length;
+  document.getElementById("qScore").textContent = "正解 "+quiz.score;
+  document.getElementById("qBar").style.width = Math.round(quiz.idx/quiz.list.length*100)+"%";
+  document.getElementById("qDomain").textContent = (SUB_PARENT[q.sub]||"")+" ／ "+q.sub;
+  document.getElementById("qText").textContent = q.q;
+  const multi = q.type==="multi" || q.answer.length>1;
+  document.getElementById("qHint").textContent = multi ? "▶ "+q.answer.length+"つ選択してください" : "▶ 1つ選択してください";
+  const opts = document.getElementById("qOptions");
+  opts.innerHTML = "";
+  quiz.optOrder.forEach((origIdx,displayPos)=>{
+    const div = document.createElement("div");
+    div.className = "opt" + (multi?"":" round");
+    div.dataset.orig = origIdx;
+    div.innerHTML = '<div class="box">'+ABC[displayPos]+'</div><div>'+q.options[origIdx]+'</div>';
+    div.onclick = ()=>toggleOpt(origIdx, multi, div);
+    opts.appendChild(div);
+  });
+  document.getElementById("qExplain").innerHTML = "";
+  const btn = document.getElementById("qAction");
+  btn.textContent = "解答する"; btn.disabled = true;
+}
+
+function toggleOpt(origIdx, multi, div){
+  if(quiz.revealed) return;
+  if(multi){
+    const pos = quiz.sel.indexOf(origIdx);
+    if(pos>=0){ quiz.sel.splice(pos,1); div.classList.remove("sel"); }
+    else { quiz.sel.push(origIdx); div.classList.add("sel"); }
+  } else {
+    quiz.sel = [origIdx];
+    document.querySelectorAll("#qOptions .opt").forEach(o=>o.classList.remove("sel"));
+    div.classList.add("sel");
+  }
+  document.getElementById("qAction").disabled = quiz.sel.length===0;
+}
+
+function onAction(){
+  if(!quiz.revealed){ revealAnswer(); }
+  else { nextQuestion(); }
+}
+
+function revealAnswer(){
+  const q = quiz.list[quiz.idx];
+  quiz.revealed = true;
+  const correct = arrEq(quiz.sel, q.answer);
+  document.querySelectorAll("#qOptions .opt").forEach(o=>{
+    const i = parseInt(o.dataset.orig,10);
+    o.onclick = null; o.style.cursor = "default";
+    if(q.answer.includes(i)) o.classList.add("correct");
+    else if(quiz.sel.includes(i)) o.classList.add("wrong");
+    o.classList.remove("sel");
+  });
+  const ex = document.getElementById("qExplain");
+  ex.innerHTML = '<div class="explain '+(correct?"ok":"ng")+'"><b>'
+    + (correct?"⭕️ 正解":"❌ 不正解")+'</b><br>'+q.explanation+'</div>';
+
+  if(correct) quiz.score++;
+  stats.total++; if(correct) stats.correct++;
+  const dd = stats.dom[q.sub] || {a:0,c:0};
+  dd.a++; if(correct) dd.c++; stats.dom[q.sub]=dd;
+  const wpos = stats.wrong.indexOf(q.id);
+  if(correct){ if(wpos>=0) stats.wrong.splice(wpos,1); }
+  else { if(wpos<0) stats.wrong.push(q.id); if(!quiz.wrongThis.includes(q.id)) quiz.wrongThis.push(q.id); }
+  saveStats(stats);
+
+  document.getElementById("qScore").textContent = "正解 "+quiz.score;
+  const btn = document.getElementById("qAction");
+  btn.textContent = (quiz.idx===quiz.list.length-1) ? "結果を見る" : "次の問題へ ▶";
+}
+
+function nextQuestion(){
+  if(quiz.idx < quiz.list.length-1){ quiz.idx++; renderQuestion(); window.scrollTo(0,0); }
+  else { finishQuiz(); }
+}
+
+function finishQuiz(){
+  const total = quiz.list.length;
+  const pct = total ? Math.round(quiz.score/total*100) : 0;
+  stats.hist.push(pct); if(stats.hist.length>20) stats.hist = stats.hist.slice(-20);
+  saveStats(stats);
+
+  document.getElementById("quiz").classList.add("hide");
+  document.getElementById("result").classList.remove("hide");
+  document.getElementById("rMode").textContent = (quiz.mode==="review"?"復習モード":"通常演習")+" の結果";
+  document.getElementById("rScore").textContent = quiz.score+" / "+total;
+  const pill = document.getElementById("rPct");
+  pill.textContent = "正答率 "+pct+"%";
+  pill.style.borderColor = pct>=70?"var(--ok)":(pct>=40?"var(--warn)":"var(--ng)");
+  let msg = pct>=90 ? "🎉 素晴らしい！合格圏内です。" : pct>=70 ? "👍 合格ライン到達。この調子！" : pct>=40 ? "📚 もう少し。復習で固めましょう。" : "🔥 まずは解説をじっくり読み直そう。";
+  document.getElementById("rMsg").textContent = msg;
+
+  const rc = document.getElementById("rReviewCard");
+  const rr = document.getElementById("rReview");
+  const rb = document.getElementById("rReviewBtn");
+  if(quiz.wrongThis.length){
+    rr.innerHTML = quiz.wrongThis.map(id=>{
+      const q = byId(id);
+      const ans = q.answer.map(i=>q.options[i]).join(" / ");
+      return '<div class="reviewItem"><b>'+q.q+'</b><br><span class="muted">正解: '+ans+'</span></div>';
+    }).join("");
+    rc.classList.remove("hide"); rb.classList.remove("hide");
+  } else {
+    rr.innerHTML = '<div class="muted">全問正解！🎯</div>';
+    rc.classList.remove("hide"); rb.classList.add("hide");
+  }
+  window.scrollTo(0,0);
+}
+
+function showStart(){
+  document.getElementById("quiz").classList.add("hide");
+  document.getElementById("result").classList.add("hide");
+  document.getElementById("start").classList.remove("hide");
+  stats = loadStats();
+  renderDash(); renderReviewInfo();
+  window.scrollTo(0,0);
+}
+
+function resetAll(){
+  if(!confirm("学習記録（解答数・正答率・要復習）をすべて消去します。よろしいですか？")) return;
+  localStorage.removeItem(LS_KEY);
+  stats = loadStats();
+  renderDash(); renderReviewInfo();
+}
+
+init();
+</script>
+</body>
+</html>
