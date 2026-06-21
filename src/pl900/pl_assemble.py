@@ -82,3 +82,22 @@ html = tpl.replace("__QUESTIONS__", json.dumps(out, ensure_ascii=False))
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html)
 print("\nindex.html を書き出しました。サイズ:", len(html), "bytes")
+
+# ---- 問題バンクJSONも書き出す（verify/Obsidianスナップショット用） ----
+meta = {
+    "exam": "PL-900",
+    "title": "Power Platform Fundamentals 問題バンク",
+    "version": "2026-06-21-pl900a",
+    "source": "Microsoft Learn 公式出題範囲(Skills measured 2025-06-20版)＋公式Practice Assessment実測(50問)に基づく独自作成。選択肢は実在の兄弟サービス/近接概念で構成し消去法が効きにくい本番難度。詳細解説付き。",
+    "passing": "700/1000相当（このバンクでは正答率70%を目安）",
+    "naming": "Copilot Studio(旧Power Virtual Agents)、Power PlatformのCopilot機能、プロセスマイニング等の最新要素に対応。Power BI/AI Builderは出題範囲外のため誤答選択肢としてのみ使用。",
+    "count": len(out),
+    "multi_select": mult,
+    "categories": list(SUBS.keys()),
+    "category_counts": {a: area_ct[a] for a in SUBS},
+    "live_app": "https://pythonzero-apex.github.io/study-apps/pl900/",
+}
+bank = {"meta": meta, "questions": out}
+with open("pl-900-questions.json", "w", encoding="utf-8") as f:
+    json.dump(bank, f, ensure_ascii=False, indent=1)
+print("pl-900-questions.json を書き出しました。問題数:", len(out), " 複数選択:", mult)
