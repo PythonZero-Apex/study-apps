@@ -70,7 +70,8 @@ select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:1
 .opt.wrong{border-color:var(--ng);background:var(--ngbg)}
 .opt.correct .mk{background:var(--ok);border-color:var(--ok)}
 .opt.wrong .mk{background:var(--ng);border-color:var(--ng)}
-.expl{margin-top:14px;border-radius:11px;padding:13px 14px;font-size:13.5px;border:1px solid var(--line);background:#f7faf8;white-space:pre-wrap}
+.expl{margin-top:14px;border-radius:11px;padding:13px 14px;font-size:13.5px;border:1px solid var(--line);background:#f7faf8}
+.expl .exbody{white-space:pre-wrap}
 .expl.ok{border-color:#bfe3cf;background:var(--okbg)}
 .expl.ng{border-color:#f3c4bd;background:var(--ngbg)}
 .expl .h{font-weight:800;margin-bottom:5px;display:flex;align-items:center;gap:6px}
@@ -295,7 +296,7 @@ function answer(){
     `<div class="expl ${it.ok?'ok':'ng'}">
       <div class="h ${it.ok?'ok':'ng'}">${it.ok?'✓ 正解':'✗ 不正解'}</div>
       <div class="sub">正解：${esc(corrText)}</div>
-      <div>${esc(it.ref.explanation)}</div>
+      <div class="exbody">${esc(it.ref.explanation)}</div>
     </div>`;
   // 統計更新
   const c = it.ref.domain;
